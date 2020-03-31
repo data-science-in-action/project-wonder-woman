@@ -1,0 +1,32 @@
+---
+title: "Proposal"
+author:
+  - 刘崟
+  - 慕慧君
+  - 肖雨婷
+  - 王洁
+  - 卢晋萍
+documentclass: ctexart
+output:
+  rticles::ctex:
+    fig_caption: yes
+geometry:
+- lmargin=2.5cm
+- rmargin=2.5cm
+fontsize: 12
+---
+
+# 1研究背景
+自新型冠状病毒在中国武汉爆发后，中国便向世界卫生组织及其他各国及时说明了新型冠状病毒的情况以及中国病例情况。但是在中国举全国之力抗疫终见成效之后，新型冠状病毒却在世界各国开始爆发。截止2020年3月31日全球累计确诊病例达777,599人，现存确诊582,712人，累计死亡37,141人。
+
+# 2研究问题
+本此项目选取一些典型国家进行疫情发展态势对比，另外分析各国采取的应对措施，初探如何从此次疫情吸取教训。
+
+# 3数据来源
+研究中的数据来自 [世界卫生组织](https://www.who.int/emergencies/diseases/novel-coronavirus-2019/situation-reports) 、[中国国家卫健委](http://www.nhc.gov.cn/yjb/pqt/new_list.shtml)和[湖北省卫健委](http://wjw.hubei.gov.cn/fbjd/tzgg/)。
+
+# 4研究方法
+此次研究采用时间序列分析法、图表分析法等等，最终需要根据研究过程进行调整。
+
+# 5困难和应对之策
+组员们软件使用能力参差不齐，对一些复杂的研究模型和代码不能熟练使用。在学习的过程中，我们将积极讨论，多去查阅资料，希望通过此次课程，每个人都能有所收获。
