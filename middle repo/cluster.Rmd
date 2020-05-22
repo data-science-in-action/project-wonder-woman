@@ -1,7 +1,7 @@
 ---
-title: "cluster01"
+title: "聚类分析"
 author: "肖雨婷"
-date: "2020/5/16"
+date: "2020/5/20"
 output:
   ioslides_presentation: 
     smaller: true
@@ -11,19 +11,6 @@ output:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 ```
-## 目录
-<br><br><br><br>
-- **01  聚类分析**
-<br><br>
-- **02  数据及方法**
-<br><br>
-- **03  实证分析**
-<br><br>
-- **04  复工复产建议**
-
-
-
-
 ## 1.聚类分析
 
 <br>
@@ -59,10 +46,10 @@ knitr::opts_chunk$set(echo = FALSE)
 <br>
 **定义:**
 <br>
-对样本进行分类处理<br>
+对指标进行分类处理<br>
 **优点：**
 <br>
-应用广泛，了解全面<br>
+了解全面，应用广泛<br>
 
 
 
@@ -74,12 +61,8 @@ knitr::opts_chunk$set(echo = FALSE)
 **2.1数据来源**
 <br>
 <br>
-***GitHub链接：***
-<br>
-https://github.com/CSSEGISandData/COVID-19
 
-<br>
-<br>
+
 ```{r,out.width="90%",out.height="90%",echo=FALSE}
 knitr::include_graphics("pic/data.PNG")
 ```
@@ -118,7 +101,7 @@ knitr::include_graphics("pic/data.PNG")
 <br>
 1.确定初始凝聚点
 <br>
-2.计算样本与每一个初始宁几点的距离，并将每一个样本归入与该样本最近的凝聚点所代表的初始类中
+2.计算样本与每一个初始凝聚点的距离，并将每一个样本归入与该样本最近的凝聚点所代表的初始类中
 <br>
 3.计算样本与上述新凝聚点的距离，并将每一个样本归入与该样本最近的新凝聚点所代表的类中
 <br>
@@ -135,10 +118,9 @@ knitr::include_graphics("pic/data.PNG")
 **2.3在R中的实现**
 <br>
 <br>
-**安装包**
-
-***Hmics的介绍**
-```{r,out.width="90%",out.height="90%",echo=FALSE}
+**2.3.1 安装包:**
+**Hmics的介绍**
+```{r,out.width="85%",out.height="85%",echo=FALSE}
 knitr::include_graphics("pic/a.PNG")
 ```
 
@@ -148,17 +130,29 @@ knitr::include_graphics("pic/a.PNG")
 ## 2.数据及方法
 <br>
 <br>
-**2.3在R中的实现**
+**2.3.2 函数**
+
+
 <br>
+***kmeans()函数***
+
 <br>
-***Kmeans()函数***
-<br>
-```{r,out.width="90%",out.height="90%",echo=FALSE}
+```{r,out.width="100%",out.height="100%",echo=FALSE}
 knitr::include_graphics("pic/kmeans.PNG")
 ```
 
-***hclust()函数***
+
+
+
+
+## 2.数据及方法
+
+
+
 <br>
-```{r,out.width="90%",out.height="90%",echo=FALSE}
+***hclust()函数***
+
+<br>
+```{r,out.width="100%",out.height="100%",echo=FALSE}
 knitr::include_graphics("pic/hclust.PNG")
 ```
