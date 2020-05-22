@@ -1,0 +1,298 @@
+---
+title: "Logistic growing model"
+author: "MuHuijun"
+date: "2020/5/20"
+output:
+  ioslides_presentation:
+    smaller: true
+    widecreen: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## COVID-19预测预报非线性模型及机理简介
+  
+在时间序列里，有些变量的增长量最初比较小，随时间的增加逐渐增长而达到一个快速增长时期，而后增长速度趋缓，最终达到稳定的总增长量，这一过程若用曲线来表示，则是一种拉长的S形曲线。这种S形曲线因变量的增长特性的不同而呈现出多样性变化。通常传染病的累计病例遵循S形曲线增长。Logistic函数是一种常见的S形函数，它是皮埃尔·弗朗索瓦·韦吕勒在1844或1845年在研究它与人口增长的关系时命名的。该模型广泛应用于生物繁殖和生长过程、人口增长过程模拟。
+
+---
+
+Logistic方程,即常微分方程如下：$$\frac {dP} {dt} =rP*(1-\frac {P} {K})$$ 将上述方程求解，可以得到logistic函数：$$P(t)=\frac {KP_0 e^rt} {K+P_0(e^rt-1)}$$    
+其中$P_0$为初始值，$r$衡量曲线变化快慢，$t$为时间，$dP/dt$是种群增长率（单位时间个体数量的改变），$P$是种群的大小（个体的数量），$K$是可能出现的最大种群数（上渐近线）或承载力。
+  
+综上所述，本文将从统计非线性回归的角度来预测和比较各国COVID-19疫情的发展规模，具体聚焦如下问题的研究：（1）用非线性logistic增长曲线模型对各国COVID-19累计确诊病例进行拟合。（2）用非线性logistic增长曲线模型对各国最终流行规模进行预测并进行比较。
+
+
+## 数据及R程序包说明
+
+-**数据说明**
+  
+  本文选用2019年GDP前十的国家：美国、中国、日本、德国、印度、法国、英国、巴西、意大利和加拿大。对GDP-TOP10的国家自2019年12月31日至2020年5月8日COVID-19累计确诊病例进行拟合和预测，并对GDP-TOP10的国家最终流行规模的预测值进行比较。
+  
+-**R程序包**
+  
+  本文所采用的R包为**nlrwrb**包中的**nls()**函数，相关使用可参考《Nonlinear Regression with R》。函数**nls()**自带一组自启动函数，即"self-starter functions"，其可以自动设置初始值，Logistic的自启动函数为**SSlogis(x,Asym,xmid,scal)**，其表达式为
+$$\frac{Asym}{(1 + exp(\frac{xmid − x}{scal}))}$$,与logistic函数表达式略有不同，此处只关注参数**Asym**，其值表示最终流行规模，及logistic函数表达式中的K值。
+
+**注：**此次，我将仅展示利用**nls()**函数对GDP-TOP10国家COVID-19累计确诊病例的拟合和预测，并给出最终流行规模预测值的置信区间。
+
+
+## 美国COVID-19累计确诊病例的拟合
+```{r,echo=FALSE,error=TRUE,warning=FALSE,message=FALSE}
+library(tidyverse)
+GDP_10 <- read_csv('GDP_TOP10_dataF.csv')
+days <- GDP_10[,1]
+days <- unlist(days)
+US <- GDP_10[,2]
+US <- unlist(US)
+CN <- GDP_10[,3]
+CN <- unlist(CN)
+JP <- GDP_10[,4]
+JP <- unlist(JP)
+GE <- GDP_10[,5]
+GE <- unlist(GE)
+IN <- GDP_10[,6]
+IN <- unlist(IN)
+FR <- GDP_10[,7]
+FR <- unlist(FR)
+UK <- GDP_10[,8]
+UK <- unlist(UK)
+BR <- GDP_10[,9]
+BR <- unlist(BR)
+IT <- GDP_10[,10]
+IT <- unlist(IT)
+CA <- GDP_10[,11]
+CA <- unlist(CA)
+
+##as.data.frame
+df1 <- as.data.frame(cbind(days,US))
+df2 <- as.data.frame(cbind(days,CN))
+df3 <- as.data.frame(cbind(days,JP))
+df4 <- as.data.frame(cbind(days,GE))
+df5 <- as.data.frame(cbind(days,IN))
+df6 <- as.data.frame(cbind(days,FR))
+df7 <- as.data.frame(cbind(days,UK))
+df8 <- as.data.frame(cbind(days,BR))
+df9 <- as.data.frame(cbind(days,IT))
+df10 <- as.data.frame(cbind(days,CA))
+
+#delete NA
+df1 <- na.omit(df1)
+df2 <- na.omit(df2)
+df3 <- na.omit(df3)
+df4 <- na.omit(df4)
+df5 <- na.omit(df5)
+df6 <- na.omit(df6)
+df7 <- na.omit(df7)
+df8 <- na.omit(df8)
+df9 <- na.omit(df9)
+df10 <- na.omit(df10)
+
+#model
+library('nlrwr')
+fm1 <- nls(US ~ SSlogis(days, Asym1, xmid1, scal1), data = df1)
+summary(fm1)
+```
+
+## 美国COVID-19累计确诊病例的预测
+```{r,echo=FALSE,error=TRUE,warning=FALSE,message=FALSE}
+coef(fm1)
+confint(fm1)
+```
+
+## 美国
+
+
+```{r,out.width="80%",out.height="80%",echo=FALSE}
+library(ggplot2)
+ggplot(df1,aes(days,predict(fm1)))+geom_line()+geom_point(aes(y=US))+geom_hline(yintercept = coef(fm1)[1],lty=2)+theme_bw()+theme(panel.grid.minor = element_blank(),panel.grid.major = element_blank())+xlab("days")+ylab("Number of confirmed cases(US)")
+```
+
+
+## 中国COVID-19累计确诊病例的拟合
+```{r,echo=FALSE,error=TRUE,warning=FALSE,message=FALSE}
+#model
+fm2 <- nls(CN ~ SSlogis(days, Asym2, xmid2, scal2), data = df2)
+summary(fm2)
+```
+
+## 中国COVID-19累计确诊病例的预测
+```{r,echo=FALSE,error=TRUE,warning=FALSE,message=FALSE}
+coef(fm2)
+confint(fm2)
+```
+
+## 中国
+
+
+```{r,out.width="80%",out.height="80%",echo=FALSE}
+ggplot(df2,aes(days,predict(fm2)))+geom_line()+geom_point(aes(y=CN))+geom_hline(yintercept = coef(fm2)[1],lty=2)+theme_bw()+theme(panel.grid.minor = element_blank(),panel.grid.major = element_blank())+xlab("days")+ylab("Number of confirmed cases(CN)")
+```
+
+
+## 日本COVID-19累计确诊病例的拟合
+```{r,echo=FALSE,error=TRUE,warning=FALSE,message=FALSE}
+#model
+fm3 <- nls(JP ~ SSlogis(days, Asym3, xmid3, scal3), data = df3)
+summary(fm3)
+```
+
+## 日本COVID-19累计确诊病例的预测
+```{r,echo=FALSE,error=TRUE,warning=FALSE,message=FALSE}
+coef(fm3)
+confint(fm3)
+```
+
+## 日本
+
+
+```{r,out.width="80%",out.height="80%",echo=FALSE}
+ggplot(df3,aes(days,predict(fm3)))+geom_line()+geom_point(aes(y=JP))+geom_hline(yintercept = coef(fm3)[1],lty=2)+theme_bw()+theme(panel.grid.minor = element_blank(),panel.grid.major = element_blank())+xlab("days")+ylab("Number of confirmed cases(JP)")
+```
+
+
+## 德国COVID-19累计确诊病例的拟合
+```{r,echo=FALSE,error=TRUE,warning=FALSE,message=FALSE}
+#model
+fm4 <- nls(GE ~ SSlogis(days, Asym4, xmid4, scal4), data = df4)
+summary(fm4)
+```
+
+## 德国COVID-19累计确诊病例的预测
+```{r,echo=FALSE,error=TRUE,warning=FALSE,message=FALSE}
+coef(fm4)
+confint(fm4)
+```
+
+## 德国
+
+
+```{r,out.width="80%",out.height="80%",echo=FALSE}
+ggplot(df4,aes(days,predict(fm4)))+geom_line()+geom_hline(yintercept = coef(fm4)[1],lty=2)+geom_point(aes(y=GE))+theme_bw()+theme(panel.grid.minor = element_blank(),panel.grid.major = element_blank())+xlab("days")+ylab("Number of confirmed cases(GE)")
+```
+
+
+## 印度COVID-19累计确诊病例的拟合
+```{r,echo=FALSE,error=TRUE,warning=FALSE,message=FALSE}
+#model
+fm5 <- nls(IN ~ SSlogis(days, Asym5, xmid5, scal5), data = df5)
+summary(fm5)
+```
+
+## 印度COVID-19累计确诊病例的预测
+```{r,echo=FALSE,error=TRUE,warning=FALSE,message=FALSE}
+coef(fm5)
+confint(fm5)
+```
+
+## 印度
+
+
+```{r,out.width="80%",out.height="80%",echo=FALSE}
+ggplot(df5,aes(days,predict(fm5)))+geom_line()+geom_hline(yintercept = coef(fm5)[1],lty=2)+geom_point(aes(y=IN))+theme_bw()+theme(panel.grid.minor = element_blank(),panel.grid.major = element_blank())+xlab("days")+ylab("Number of confirmed cases(IN)")
+```
+
+
+## 法国COVID-19累计确诊病例的拟合
+```{r,echo=FALSE,error=TRUE,warning=FALSE,message=FALSE}
+#model
+fm6 <- nls(FR ~ SSlogis(days, Asym6, xmid6, scal6), data = df6)
+summary(fm6)
+```
+
+## 法国COVID-19累计确诊病例的预测
+```{r,echo=FALSE,error=TRUE,warning=FALSE,message=FALSE}
+coef(fm6)
+confint(fm6)
+```
+
+## 法国
+```{r,out.width="80%",out.height="80%",echo=FALSE}
+ggplot(df6,aes(days,predict(fm6)))+geom_line()+geom_hline(yintercept = coef(fm6)[1],lty=2)+geom_point(aes(y=FR))+theme_bw()+theme(panel.grid.minor = element_blank(),panel.grid.major = element_blank())+xlab("days")+ylab("Number of confirmed cases(FR)")
+```
+
+
+## 英国COVID-19累计确诊病例的拟合
+```{r,echo=FALSE,error=TRUE,warning=FALSE,message=FALSE}
+#model
+fm7 <- nls(UK ~ SSlogis(days, Asym7, xmid7, scal7), data = df7)
+summary(fm7)
+```
+
+## 英国COVID-19累计确诊病例的预测
+```{r,echo=FALSE,error=TRUE,warning=FALSE,message=FALSE}
+coef(fm7)
+confint(fm7)
+```
+
+## 英国
+
+
+```{r,out.width="80%",out.height="80%",echo=FALSE}
+ggplot(df7,aes(days,predict(fm7)))+geom_line()+geom_hline(yintercept = coef(fm7)[1],lty=2)+geom_point(aes(y=UK))+theme_bw()+theme(panel.grid.minor = element_blank(),panel.grid.major = element_blank())+xlab("days")+ylab("Number of confirmed cases(UK)")
+```
+
+
+## 巴西COVID-19累计确诊病例的拟合
+```{r,echo=FALSE,error=TRUE,warning=FALSE,message=FALSE}
+#model
+fm8 <- nls(BR ~ SSlogis(days, Asym8, xmid8, scal8), data = df8)
+summary(fm8)
+```
+
+## 巴西COVID-19累计确诊病例的预测
+```{r,echo=FALSE,error=TRUE,warning=FALSE,message=FALSE}
+coef(fm8)
+confint(fm8)
+```
+
+## 巴西
+
+
+```{r,out.width="80%",out.height="80%",echo=FALSE}
+ggplot(df8,aes(days,predict(fm8)))+geom_line()+geom_hline(yintercept = coef(fm8)[1],lty=2)+geom_point(aes(y=BR))+theme_bw()+theme(panel.grid.minor = element_blank(),panel.grid.major = element_blank())+xlab("days")+ylab("Number of confirmed cases(BR)")
+```
+
+
+## 意大利COVID-19累计确诊病例的拟合
+```{r,echo=FALSE,error=TRUE,warning=FALSE,message=FALSE}
+#model
+fm9 <- nls(IT ~ SSlogis(days, Asym9, xmid9, scal9), data = df9)
+summary(fm9)
+```
+
+## 意大利COVID-19累计确诊病例的预测
+```{r,echo=FALSE,error=TRUE,warning=FALSE,message=FALSE}
+coef(fm9)
+confint(fm9)
+```
+
+## 意大利
+
+
+```{r,out.width="80%",out.height="80%",echo=FALSE}
+ggplot(df9,aes(days,predict(fm9)))+geom_line()+geom_hline(yintercept = coef(fm9)[1],lty=2)+geom_point(aes(y=IT))+theme_bw()+theme(panel.grid.minor = element_blank(),panel.grid.major = element_blank())+xlab("days")+ylab("Number of confirmed cases(IT)")
+```
+
+
+## 加拿大COVID-19累计确诊病例的拟合
+```{r,echo=FALSE,error=TRUE,warning=FALSE,message=FALSE}
+#model
+fm10 <- nls(CA ~ SSlogis(days, Asym10, xmid10, scal10), data = df10)
+summary(fm10)
+```
+
+## 加拿大COVID-19累计确诊病例的预测
+```{r,echo=FALSE,error=TRUE,warning=FALSE,message=FALSE}
+coef(fm10)
+confint(fm10)
+```
+## 加拿大
+
+
+```{r,out.width="80%",out.height="80%",echo=FALSE}
+ggplot(df10,aes(days,predict(fm10)))+geom_line()+geom_hline(yintercept = coef(fm10)[1],lty=2)+geom_point(aes(y=CA))+theme_bw()+theme(panel.grid.minor = element_blank(),panel.grid.major = element_blank())+xlab("days")+ylab("Number of confirmed cases(CA)")
+```
+
+
