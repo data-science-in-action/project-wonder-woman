@@ -401,11 +401,348 @@ $d^2_{ij}(M)=(x_i-x_j)'\Sigma^{-1}(x_i-x_j)$
 
 ……
 
-# 4 慕慧君
+# 4 趋势拟合及预测
+　　本章节通过拟合患者比例和增长率的变化来分析疫情趋势，将复杂的外界影响因素视为患者数量增长的环境压力，以拟合生态增长曲线的方式解读2019-nCoV病毒的感染患者例数变化，分析国内外COVID-19疫情现状并预估发展趋势。
+    
+    
+## 4.1 COVID-19预测预报非线性模型及其机理简介
+
+　　在时间序列里，有些变量的增长量最初比较小，随时间的增加逐渐增长而达到一个快速增长时期，而后增长速度趋缓，最终达到稳定的总增长量，这一过程若用曲线来表示，则是一种拉长的S形曲线。这种S形曲线因变量的增长特性的不同而呈现出多样性变化。通常传染病的累计病例遵循S形曲线增长。Logistic函数是一种常见的S形函数，它是皮埃尔·弗朗索瓦·韦吕勒在1844或1845年在研究它与人口增长的关系时命名的。该模型广泛应用于生物繁殖和生长过程、人口增长过程模拟。在分析COVID-19疫情变化时，可以将患者看作在限定环境中数量增长的物种，实际中病毒的传播也存在人为管控或自然阻力，因此2019-nCoV病毒的感染者例数不会无限制的增长，在一定空间范围内应符合Logistic增长曲线。
+
+  
+Logistic方程,即常微分方程如下：$$\frac {dP} {dt} =rP*(1-\frac {P} {K})$$ 将上述方程求解，可以得到Logistic函数：$$P(t)=\frac {KP_0 e^rt} {K+P_0(e^rt-1)}$$    
+其中$P_0$为初始值，$r$为衡量曲线变化快慢，$t$为时间。$\frac{dP}{dt}$为种群增长率（单位时间个体数量的改变），$P$为种群的大小（个体的数量），$K$为可能出现的最大种群数（上渐近线）或承载力。
 
 
+## 4.2 数据说明与方法
 
-……
+### 4.2.1 数据说明
+
+　　本章节选用2019年GDP前十的国家：美国、中国、日本、德国、印度、法国、英国、巴西、意大利和加拿大。对GDP-TOP10的国家自2019年12月31日至2020年5月24日COVID-19累计确诊病例进行拟合和预测，以及对GDP-TOP10的国家最终流行规模的预测值进行比较。同时，计算GDP-TOP10的国家自2019年12月31日至2020年5月24日每日确诊增长率数值辅助开展分析，预估GDP-TOP10的国家发展趋势。
+
+
+### 4.2.2 方法说明
+**(1) 曲线拟合方法**
+
+　　曲线拟合（curve fitting）是指选择适当的曲线类型来拟合观测数据，并用拟合的曲线方程分析变量之间的关系。本章节将每日累计确诊病例数据制成散点图，采用单个变化量对时间的响应进行非线性回归拟合，取得拟合方程的系数，并绘制回归曲线。
+ 
+　　结合$S$值、$R^2$值对拟合程度进行判断，其中$S$值描述了数据值与拟合值的距离，表示评估模型描述响应值的程度，其值越低，模型描述响应的程度越高；$R^2$值是度量拟合优度的统计量，介于$0-1$之间，也称拟合的确定系数，$R^2$越高可表示拟合优度越高。$S$值和$R^2$值表达式如下所示：
+$$S = \sum_{i=1}^{n}\qquad (y_i-\hat{y_i})$$
+$$R^2=1-\frac {SSE*(n-k)}{(var(y))*(n-1)}$$
+
+
+**(2) Logistic 增长曲线**
+
+　　本章节所采用的R包为**nlrwrb**包中的**nls()**函数，相关使用可参考《Nonlinear Regression with R》。函数**nls()**自带一组自启动函数，即"self-starter functions"，其可以自动设置初始值，Logistic的自启动函数为$SSlogis(x,Asym,xmid,scal)$，其表达式为：
+
+$$\frac{Asym}{(1 + exp(\frac{xmid−x}{scal}))}$$与Logistic函数表达式略有不同，此处参数$Asym$代表渐近线的数字参数，其值可被作为最终流行规模的预测值，及Logistic函数表达式中的$K$值，参数$xmid$表示曲线拐点处的值，参数$scal$表示x轴上的数字比例参数。
+
+
+**(3) 每日确诊增长率数值**
+
+　　本章节所采用的每日确诊增长率数值的表达式为：$$r(t):=log(\frac{P(t)}{P(t-1)})$$
+参考《neralized logistic growth modeling of the COVID-19 outbreak in 29 provinces in China and in the rest of the world》
+
+
+## 4.3 结果与分析
+```{r,echo=FALSE,error=TRUE,warning=FALSE,message=TRUE}
+library(tidyverse)
+library('nlrwr')
+library(ggplot2)
+library(ggpubr)
+```
+### 4.3.1累计确诊病例回归结果分析
+```{r,include=FALSE,error=TRUE,warning=FALSE,message=TRUE}
+#读取数据
+library(tidyverse)
+GDP_10 <- read_csv('data/GDP_TOP10_dataF.csv')
+
+days <- GDP_10[,1]
+days <- unlist(days)
+US <- GDP_10[,2]
+US <- unlist(US)
+CN <- GDP_10[,3]
+CN <- unlist(CN)
+JP <- GDP_10[,4]
+JP <- unlist(JP)
+GE <- GDP_10[,5]
+GE <- unlist(GE)
+IN <- GDP_10[,6]
+IN <- unlist(IN)
+FR <- GDP_10[,7]
+FR <- unlist(FR)
+UK <- GDP_10[,8]
+UK <- unlist(UK)
+BR <- GDP_10[,9]
+BR <- unlist(BR)
+IT <- GDP_10[,10]
+IT <- unlist(IT)
+CA <- GDP_10[,11]
+CA <- unlist(CA)
+
+#构造数据框
+df1 <- as.data.frame(cbind(days,US))
+df2 <- as.data.frame(cbind(days,CN))
+df3 <- as.data.frame(cbind(days,JP))
+df4 <- as.data.frame(cbind(days,GE))
+df5 <- as.data.frame(cbind(days,IN))
+df6 <- as.data.frame(cbind(days,FR))
+df7 <- as.data.frame(cbind(days,UK))
+df8 <- as.data.frame(cbind(days,BR))
+df9 <- as.data.frame(cbind(days,IT))
+df10 <- as.data.frame(cbind(days,CA))
+
+#删去缺失值
+df1 <- na.omit(df1)
+df2 <- na.omit(df2)
+df3 <- na.omit(df3)
+df4 <- na.omit(df4)
+df5 <- na.omit(df5)
+df6 <- na.omit(df6)
+df7 <- na.omit(df7)
+df8 <- na.omit(df8)
+df9 <- na.omit(df9)
+df10 <- na.omit(df10)
+
+#模型
+fm1 <- nls(US ~ SSlogis(days, Asym1, xmid1, scal1), data = df1)
+summary(fm1)
+coef(fm1)
+confint(fm1)
+y_hat1 <- as.vector (predict(fm1,newdata = df1))
+R1 <- 1- ((36160^2)*122) / (var(df1$US)*124)
+S1 <- sum(df1$US-y_hat1)
+
+fm2 <- nls(CN ~ SSlogis(days, Asym2, xmid2, scal2), data = df2)
+summary(fm2)
+coef(fm2)
+confint(fm2)
+y_hat2 <- as.vector (predict(fm2,newdata = df2))
+R2 <- 1- ((1524^2)*143) / (var(df2$CN)*145)
+S2 <- sum(df2$CN-y_hat2)
+
+fm3 <- nls(JP ~ SSlogis(days, Asym3, xmid3, scal3), data = df3)
+summary(fm3)
+coef(fm3)
+confint(fm3)
+y_hat3 <- as.vector(predict(fm3,newdata = df3))
+R3 <- 1- ((225.1^2)*128) / (var(df3$JP)*130)
+S3 <- sum(df3$JP-y_hat3)
+
+fm4 <- nls(GE ~ SSlogis(days, Asym4, xmid4, scal4), data = df4)
+summary(fm4)
+coef(fm4)
+confint(fm4)
+y_hat4 <- as.vector(predict(fm4,newdata = df4))
+R4 <- 1- ((4089^2)*115) / (var(df4$GE)*117)
+S4 <- sum(df4$GE-y_hat4)
+
+fm5 <- nls(IN ~ SSlogis(days, Asym5, xmid5, scal5), data = df5)
+summary(fm5)
+coef(fm5)
+confint(fm5)
+y_hat5 <- as.vector(predict(fm5,newdata = df5))
+R5 <- 1- ((1094^2)*113) / (var(df5$IN)*115)
+S5 <- sum(df5$IN-y_hat5)
+
+fm6 <- nls(FR ~ SSlogis(days, Asym6, xmid6, scal6), data = df6)
+summary(fm6)
+coef(fm6)
+confint(fm6)
+y_hat6 <- as.vector(predict(fm6,newdata = df6))
+R6 <- 1- ((2824^2)*118) / (var(df6$FR)*120)
+S6 <- sum(df6$FR-y_hat6)
+
+fm7 <- nls(UK ~ SSlogis(days, Asym7, xmid7, scal7), data = df7)
+summary(fm7)
+coef(fm7)
+confint(fm7)
+y_hat7 <- as.vector(predict(fm7,newdata = df7))
+R7 <- 1- ((4782^2)*111) / (var(df7$UK)*113)
+S7 <- sum(df7$UK-y_hat7)
+
+fm8 <- nls(BR ~ SSlogis(days, Asym8, xmid8, scal8), data = df8)
+summary(fm8)
+coef(fm8)
+confint(fm8)
+y_hat8 <- as.vector(predict(fm8,newdata = df8))
+R8 <- 1- ((2619^2)*86) / (var(df8$BR)*88) 
+S8 <- sum(df8$BR-y_hat8)
+
+fm9 <- nls(IT ~ SSlogis(days, Asym9, xmid9, scal9), data = df9)
+summary(fm9)
+coef(fm9)
+confint(fm9)
+y_hat9 <- as.vector(predict(fm9,newdata = df9))
+R9 <- 1- ((5602^2)*112) / (var(df9$IT)*114)
+S9 <- sum(df9$IT-y_hat9)
+
+fm10 <- nls(CA ~ SSlogis(days, Asym10, xmid10, scal10), data = df10)
+summary(fm10)
+coef(fm10)
+confint(fm10)
+y_hat10 <- as.vector(predict(fm10,newdata = df10))
+R10 <- 1- ((1380^2)*117) / (var(df10$CA)*119)
+S10 <- sum(df10$CA-y_hat10)
+```
+
+```{r,echo=FALSE,error=TRUE,warning=FALSE,message=FALSE}
+country = c("United States","China","Japan","Germany","India","France","United Kingdom","Brazil","Italy","Canada")
+R = c(R1,R2,R3,R4,R5,R6,R7,R8,R9,R10)
+S = c(S1,S2,S3,S4,S5,S6,S7,S8,S9,S10)
+Asym = c(coef(fm1)[1],coef(fm2)[1],coef(fm3)[1],coef(fm4)[1],coef(fm5)[1],coef(fm6)[1],coef(fm7)[1],coef(fm8)[1],coef(fm9)[1],coef(fm10)[1])
+lower_Asym = c(confint(fm1)[1,1],confint(fm2)[1,1],confint(fm3)[1,1],confint(fm4)[1,1],confint(fm5)[1,1],confint(fm6)[1,1],confint(fm7)[1,1],confint(fm8)[1,1],confint(fm9)[1,1],confint(fm10)[1,1])
+upper_Asym = c(confint(fm1)[1,2],confint(fm2)[1,2],confint(fm3)[1,2],confint(fm4)[1,2],confint(fm5)[1,2],confint(fm6)[1,2],confint(fm7)[1,2],confint(fm8)[1,2],confint(fm9)[1,2],confint(fm10)[1,2])
+xmid = c(coef(fm1)[2],coef(fm2)[2],coef(fm3)[2],coef(fm4)[2],coef(fm5)[2],coef(fm6)[2],coef(fm7)[2],coef(fm8)[2],coef(fm9)[2],coef(fm10)[2])
+scal = c(coef(fm1)[3],coef(fm2)[3],coef(fm3)[3],coef(fm4)[3],coef(fm5)[3],coef(fm6)[3],coef(fm7)[3],coef(fm8)[3],coef(fm9)[3],coef(fm10)[3])
+day = c(125,146,131,118,116,121,114,89,115,120)
+tb <- tibble(
+  country=country,
+  Day = day,
+  Asym = Asym,
+  lower_Asym = lower_Asym,
+  upper_Asym = upper_Asym,
+  xmid = xmid,
+  scal = scal,
+  R_2 = R,
+  S = S
+)
+tb
+```
+
+
+　　从上表中可以看到获得的Logistic增长曲线的参数估计，以及$S$值和$R^2$值。根据$R^2$值一列，可以看到利用Logistics增长曲线对GDP-TOP10的国家自2019年12月31日至2020年5月24日累计确诊病例数据进行拟合效果显著，且在进行回归分析时，GDP-TOP10的国家Logistic增长曲线的估计参数均通过显著性检验。参数Asym代表渐近线的数字参数，通常被用来作为最终流行规模预测值，从表中可以看到疫情由高到低的顺序为：美国、巴西、印度、英国、意大利、德国、法国、加拿大、中国、日本。而我国作为第一人口大国，累计确诊病例远低于其他国家，可见我国政府的管控措施显著。参数xmid表示x曲线拐点处的值,将参数xmid值与Day值比较，可见印度和巴西还未达到拐点值，且印度即将迎来拐点，其他国家均达到拐点。
+
+
+### 4.3.2累计确诊病例回归拟合分析
+```{r,out.width="100%",out.height="100%",echo=FALSE}
+#曲线拟合
+p1 <- ggplot(df1,aes(days,predict(fm1)))+geom_line()+geom_point(aes(y=US))+geom_hline(yintercept = coef(fm1)[1],lty=2)+theme_bw()+
+  theme(panel.grid.minor = element_blank(),panel.grid.major = element_blank())+xlab("days")+ylab("Number of confirmed cases(US)")
+
+p2 <- ggplot(df2,aes(days,predict(fm2)))+geom_line()+geom_point(aes(y=CN))+geom_hline(yintercept = coef(fm2)[1],lty=2)+theme_bw()+
+  theme(panel.grid.minor = element_blank(),panel.grid.major = element_blank())+xlab("days")+ylab("Number of confirmed cases(CN)")
+
+p3 <- ggplot(df3,aes(days,predict(fm3)))+geom_line()+geom_point(aes(y=JP))+geom_hline(yintercept = coef(fm3)[1],lty=2)+theme_bw()+
+  theme(panel.grid.minor = element_blank(),panel.grid.major = element_blank())+xlab("days")+ylab("Number of confirmed cases(JP)")
+
+p4 <- ggplot(df4,aes(days,predict(fm4)))+geom_line()+geom_hline(yintercept = coef(fm4)[1],lty=2)+geom_point(aes(y=GE))+theme_bw()+
+  theme(panel.grid.minor = element_blank(),panel.grid.major = element_blank())+xlab("days")+ylab("Number of confirmed cases(GE)")
+
+p5 <- ggplot(df5,aes(days,predict(fm5)))+geom_line()+geom_hline(yintercept = coef(fm5)[1],lty=2)+geom_point(aes(y=IN))+theme_bw()+
+  theme(panel.grid.minor = element_blank(),panel.grid.major = element_blank())+xlab("days")+ylab("Number of confirmed cases(IN)")
+
+p6 <- ggplot(df6,aes(days,predict(fm6)))+geom_line()+geom_hline(yintercept = coef(fm6)[1],lty=2)+geom_point(aes(y=FR))+theme_bw()+
+  theme(panel.grid.minor = element_blank(),panel.grid.major = element_blank())+xlab("days")+ylab("Number of confirmed cases(FR)")
+
+p7 <- ggplot(df7,aes(days,predict(fm7)))+geom_line()+geom_hline(yintercept = coef(fm7)[1],lty=2)+geom_point(aes(y=UK))+theme_bw()+
+  theme(panel.grid.minor = element_blank(),panel.grid.major = element_blank())+xlab("days")+ylab("Number of confirmed cases(UK)")
+
+p8 <- ggplot(df8,aes(days,predict(fm8)))+geom_line()+geom_hline(yintercept = coef(fm8)[1],lty=2)+geom_point(aes(y=BR))+theme_bw()+
+  theme(panel.grid.minor = element_blank(),panel.grid.major = element_blank())+xlab("days")+ylab("Number of confirmed cases(BR)")
+
+p9 <- ggplot(df9,aes(days,predict(fm9)))+geom_line()+geom_hline(yintercept = coef(fm9)[1],lty=2)+geom_point(aes(y=IT))+theme_bw()+
+  theme(panel.grid.minor = element_blank(),panel.grid.major = element_blank())+xlab("days")+ylab("Number of confirmed cases(IT)")
+
+p10 <- ggplot(df10,aes(days,predict(fm10)))+geom_line()+geom_hline(yintercept = coef(fm10)[1],lty=2)+geom_point(aes(y=CA))+theme_bw()+
+  theme(panel.grid.minor = element_blank(),panel.grid.major = element_blank())+xlab("days")+ylab("Number of confirmed cases(CA)")
+
+ggarrange(p1,p2,p3,p4,p5,p6,p7,p8,p9,p10,ncol=2,nrow=5,labels=c("US","CN","JP","GE","IN","FR","UK","BR","IT","CA"))
+```
+
+
+　　上述图是利用获得Logistics增长曲线对GDP-TOP10的国家累计确诊病例数据的拟合，从图中可以看到拟合效果良好。中国、日本、德国、法国和意大利这五个国家，疫情基本稳定，总增长量基本平稳，长时间停留在渐近线附近。美国、英国和加拿大这三个国家，刚刚抵达渐进线处，疫情情况还不明朗，政府应加强控制。印度和巴西这两个国家，离渐近线较远，疫情还未达到拐点，累计确诊病例可能会继续上升。
+
+
+### 4.3.3每日确诊增长率趋势分析
+```{r,out.width="100%",out.height="100%",echo=FALSE}
+#读取数据
+US_r <- GDP_10[,12]
+US_r <- unlist(US_r)
+CN_r <- GDP_10[,13]
+CN_r <- unlist(CN_r)
+JP_r <- GDP_10[,14]
+JP_r <- unlist(JP_r)
+GE_r <- GDP_10[,15]
+GE_r <- unlist(GE_r)
+IN_r <- GDP_10[,16]
+IN_r <- unlist(IN_r)
+FR_r <- GDP_10[,17]
+FR_r <- unlist(FR_r)
+UK_r <- GDP_10[,18]
+UK_r <- unlist(UK_r)
+BR_r <- GDP_10[,19]
+BR_r <- unlist(BR_r)
+IT_r <- GDP_10[,20]
+IT_r <- unlist(IT_r)
+CA_r <- GDP_10[,21]
+CA_r <- unlist(CA_r)
+
+#构造数据框
+df1_r <- as.data.frame(cbind(days,US_r))
+df2_r<- as.data.frame(cbind(days,CN_r))
+df3_r <- as.data.frame(cbind(days,JP_r))
+df4_r <- as.data.frame(cbind(days,GE_r))
+df5_r <- as.data.frame(cbind(days,IN_r))
+df6_r <- as.data.frame(cbind(days,FR_r))
+df7_r <- as.data.frame(cbind(days,UK_r))
+df8_r <- as.data.frame(cbind(days,BR_r))
+df9_r <- as.data.frame(cbind(days,IT_r))
+df10_r <- as.data.frame(cbind(days,CA_r))
+
+#删去缺失值
+df1_r <- na.omit(df1_r)
+df2_r <- na.omit(df2_r)
+df3_r <- na.omit(df3_r)
+df4_r <- na.omit(df4_r)
+df5_r <- na.omit(df5_r)
+df6_r <- na.omit(df6_r)
+df7_r <- na.omit(df7_r)
+df8_r <- na.omit(df8_r)
+df9_r <- na.omit(df9_r)
+df10_r <- na.omit(df10_r)
+
+#画图
+p1_r <- ggplot(df1_r,aes(days,US_r))+geom_line()+theme_bw()+
+  theme(panel.grid.minor = element_blank(),panel.grid.major = element_blank())+xlab("days")+ylab("Daily growth rate of confirmed cases(US)")
+
+p2_r <- ggplot(df2_r,aes(days,CN_r))+geom_line()+theme_bw()+
+  theme(panel.grid.minor = element_blank(),panel.grid.major = element_blank())+xlab("days")+ylab("Daily growth rate of confirmed cases(CN)")
+
+p3_r <- ggplot(df3_r,aes(days,JP_r))+geom_line()+theme_bw()+
+  theme(panel.grid.minor = element_blank(),panel.grid.major = element_blank())+xlab("days")+ylab("Daily growth rate of confirmed cases(JP)")
+
+p4_r <- ggplot(df4_r,aes(days,GE_r))+geom_line()+theme_bw()+
+  theme(panel.grid.minor = element_blank(),panel.grid.major = element_blank())+xlab("days")+ylab("Daily growth rate of confirmed cases(GE)")
+
+p5_r <- ggplot(df5_r,aes(days,IN_r))+geom_line()+theme_bw()+
+  theme(panel.grid.minor = element_blank(),panel.grid.major = element_blank())+xlab("days")+ylab("Daily growth rate of confirmed cases(IN)")
+
+p6_r <- ggplot(df6_r,aes(days,FR_r))+geom_line()+theme_bw()+
+  theme(panel.grid.minor = element_blank(),panel.grid.major = element_blank())+xlab("days")+ylab("Daily growth rate of confirmed cases(FR)")
+
+p7_r <- ggplot(df7_r,aes(days,UK_r))+geom_line()+theme_bw()+
+  theme(panel.grid.minor = element_blank(),panel.grid.major = element_blank())+xlab("days")+ylab("Daily growth rate of confirmed cases(UK)")
+
+p8_r <- ggplot(df8_r,aes(days,BR_r))+geom_line()+theme_bw()+
+  theme(panel.grid.minor = element_blank(),panel.grid.major = element_blank())+xlab("days")+ylab("Daily growth rate of confirmed cases(BR)")
+
+p9_r <- ggplot(df9_r,aes(days,IT_r))+geom_line()+theme_bw()+
+  theme(panel.grid.minor = element_blank(),panel.grid.major = element_blank())+xlab("days")+ylab("Daily growth rate of confirmed cases(IT)")
+
+p10_r <- ggplot(df10_r,aes(days,CA_r))+geom_line()+theme_bw()+
+  theme(panel.grid.minor = element_blank(),panel.grid.major = element_blank())+xlab("days")+ylab("Daily growth rate of confirmed cases(CA)")
+
+ggarrange(p1_r,p2_r,p3_r,p4_r,p5_r,p6_r,p7_r,p8_r,p9_r,p10_r,ncol=2,nrow=5,labels=c("US","CN","JP","GE","IN","FR","UK","BR","IT","CA"))
+
+```
+
+
+　　上述图是每日确诊增长率折线图，从图中可以看到中国每日确诊增长率已长时间趋于0。其次，日本每日确诊增长率也开始趋于0，为0.0008。印度和巴西这两个国家每日确诊增长率最大，分别为0.052和0.048，累计确诊病例仍会继续大幅增加。美国、英国、加拿大这三个国家每日确诊增长率为第二大，均在0.013附近。德国、法国、意大利这三个国家每日确诊增长率接近，在0.002附近。
+
+
+　　综上诉述，中国疫情已经得到控制，疫情防范效果最为突出，是十个国家最先也是最短时间将疫情控制住的国家，也体现我们国家领导人坚持“不计成本，生命至上，人民至上”的原则。日本疫情也基本得到控制，是十个国家第二位将疫情控制住的国家。德国、法国、意大利这三个国家疫情形势相似，疫情也基本得到控制。印度和巴西这两个国家疫情形势较为相似，是十个国家中疫情还仍未达到拐点的两个国家，这两个国家累计确诊病例仍会继续大幅增加，政府应加强管理措施。美国、英国、加拿大这三个国家疫情形势接近，疫情态势还不太明朗。
+
 
 # 5 小结与讨论
 
@@ -417,3 +754,11 @@ $d^2_{ij}(M)=(x_i-x_j)'\Sigma^{-1}(x_i-x_j)$
 
 
 # 参考文献
+
+[1] 杨安吉,颜忠诚.基于生态模型的新型冠状病毒肺炎疫情分析.首都师范大学学报(自然科学版).http://kns.cnki.net/kcms/detail/11.3189.N.20200514.1741.002.html 
+
+
+[2] Christian Ritz,Jens Carl Streibig.Nonlinear Regression with R.SpringerLink.2008.Preprint at:https://link.springer.com/book/10.1007/978-0-387-09616-2
+
+
+[3] Ke Wu,Didier Darcet,Qian Wang,Didier Sornette.Generalized logistic growth modeling of the COVID-19 outbreak in 29 provinces in China and in the rest of the world.medRxiv.2020.Preprint at: https://www.medrxiv.org/content/medrxiv/early/2020/03/16/2020.03.11.20034363.full.pdf
