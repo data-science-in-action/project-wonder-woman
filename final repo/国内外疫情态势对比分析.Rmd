@@ -18,10 +18,9 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # 1 引言
 
-
-
-
-……
+&emsp;&emsp;2020年初，不明原因的病毒性肺炎在中国武汉市爆发，随后，其病原体被确定为新型冠状病毒，并在全球多个国家相继出现。根据世界卫生组织报告，1月11日，西太平洋地区出现41例确诊病例，1月13日，东南亚出现1例确诊病例，1月20日，美洲出现1例确诊病例，1月24日，欧洲出现3例确诊病例，1月29日，地中海东部地区出现4例确诊病例，2月25日，非洲出现1例确诊病例。截止5月12日 6:42 CEST（Central Europe Summer Time ， 西 太 平 洋 地 区 新 冠 肺炎累积确诊病例已达到161872例，东南亚地区累积确诊107354例，美洲累积确诊1743717例，欧洲累积确诊1755790例，地中海东部地区累积确诊281744例，非洲累积确诊46829例。
+    
+&emsp;&emsp;从以上数据可以看出，同一病毒性肺炎在不同地区和国家呈现出不同的发展态势。研究疫情发展规律，掌握疫情的发展态势，有利于政府安抚民心以及科学有效地制定防控政策。本文对全球疫情的发展态势进行了可视化分析，然后选取一些代表性国家对新冠肺炎的不同发展趋势类型进行了分析，并对各个国家肺炎发展趋势进行了拟合和预测，为科学有效地控制疫情提供相关建议。
 
 # 2 描述性统计分析
 
@@ -755,10 +754,11 @@ ggarrange(p1_r,p2_r,p3_r,p4_r,p5_r,p6_r,p7_r,p8_r,p9_r,p10_r,ncol=2,nrow=5,label
 
 # 参考文献
 
-[1] 杨安吉,颜忠诚.基于生态模型的新型冠状病毒肺炎疫情分析.首都师范大学学报(自然科学版).http://kns.cnki.net/kcms/detail/11.3189.N.20200514.1741.002.html 
+[1] Christian Ritz,Jens Carl Streibig.Nonlinear Regression with R.SpringerLink.2008.Preprint at:https://link.springer.com/book/10.1007/978-0-387-09616-2
 
 
-[2] Christian Ritz,Jens Carl Streibig.Nonlinear Regression with R.SpringerLink.2008.Preprint at:https://link.springer.com/book/10.1007/978-0-387-09616-2
+[2] Ke Wu,Didier Darcet,Qian Wang,Didier Sornette.Generalized logistic growth modeling of the COVID-19 outbreak in 29 provinces in China and in the rest of the world.medRxiv.2020.Preprint at: https://www.medrxiv.org/content/medrxiv/early/2020/03/16/2020.03.11.20034363.full.pdf
 
+[3]杨吉安,颜忠诚.基于生态模型的新型冠状病毒肺炎疫情分析[J/OL].首都师范大学学报(自然科学版):1-12[2020-05-21]
 
-[3] Ke Wu,Didier Darcet,Qian Wang,Didier Sornette.Generalized logistic growth modeling of the COVID-19 outbreak in 29 provinces in China and in the rest of the world.medRxiv.2020.Preprint at: https://www.medrxiv.org/content/medrxiv/early/2020/03/16/2020.03.11.20034363.full.pdf
+[4易大莉,李高明,冷怀明.新型冠状病毒肺炎疫情发展区域差异的聚类分析[J/OL].重庆医科大学学报:1-6[2020-05-27]
