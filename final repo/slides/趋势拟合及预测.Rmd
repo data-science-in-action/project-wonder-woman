@@ -1,7 +1,7 @@
 ---
 title: "趋势拟合及预测"
 author: "慕慧君"
-date: "2020/5/27"
+date: "2020/5/28"
 output: 
   ioslides_presentation:
     smaller: true
@@ -52,13 +52,13 @@ knitr::include_graphics("pic/4.3.1.png")
 
 ## 累计确诊病例回归拟合分析
 
-```{r, out.height="70%", out.width="70%", echo=FALSE}
+```{r,fig.align='center',out.height="80%", out.width="80%", echo=FALSE}
 knitr::include_graphics("pic/4.3.2.png")
 ```
 
 ## 每日确诊增长率趋势分析
 
-```{r, out.height="70%", out.width="70%", echo=FALSE}
+```{r,fig.align='center',out.height="80%", out.width="80%", echo=FALSE}
 knitr::include_graphics("pic/4.3.3.png")
 ```
 
