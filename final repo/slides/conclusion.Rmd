@@ -1,0 +1,53 @@
+---
+title: "结论与建议"
+author: "肖雨婷"
+date: "2020/5/29"
+output: 
+  ioslides_presentation:
+    smaller: true
+    widecreen: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## 1. 结论
+
+###  **$\blacktriangleright$ “纵观世界风云，这边风景独好”**
+
+```{r,fig.align='left',out.height="40%", out.width="40%", echo=FALSE}
+knitr::include_graphics("pic/12.PNG")
+```
+
+
+
+## 1. 结论
+
+###  **$\blacktriangleright$ “革命尚未成功，同志仍需努力”**
+　
+```{r,fig.align='left',out.height="50%", out.width="50%", echo=FALSE}
+knitr::include_graphics("pic/23.PNG")
+```
+
+
+
+
+## 1. 结论
+
+###  **$\blacktriangleright$ ”黎明之前最黑暗"**
+
+```{r,fig.align='left',out.height="50%", out.width="50%", echo=FALSE}
+knitr::include_graphics("pic/33.PNG")
+```
+
+
+
+
+## 1. 结论
+
+```{r,fig.align='left',out.height="40%", out.width="40%", echo=FALSE}
+knitr::include_graphics("pic/32.PNG")
+```
+
+
