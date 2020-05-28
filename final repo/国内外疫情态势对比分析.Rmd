@@ -615,37 +615,32 @@ tb
 　　从上表中可以看到获得的Logistic增长曲线的参数估计，以及$S$值和$R^2$值。根据$R^2$值一列，可以看到利用Logistics增长曲线对GDP-TOP10的国家自2019年12月31日至2020年5月24日累计确诊病例数据进行拟合效果显著，且在进行回归分析时，GDP-TOP10的国家Logistic增长曲线的估计参数均通过显著性检验。参数Asym代表渐近线的数字参数，通常被用来作为最终流行规模预测值，从表中可以看到疫情由高到低的顺序为：美国、巴西、印度、英国、意大利、德国、法国、加拿大、中国、日本。而我国作为第一人口大国，累计确诊病例远低于其他国家，可见我国政府的管控措施显著。参数xmid表示x曲线拐点处的值,将参数xmid值与Day值比较，可见印度和巴西还未达到拐点值，且印度即将迎来拐点，其他国家均达到拐点。
 
 ### 4.3.2累计确诊病例回归拟合分析
-```{r,out.width="100%",out.height="100%",echo=FALSE}
+```{r,fig.align='center', fig.cap=" 2019年GDP-TOP10的国家累计确诊病例回归拟合",echo=FALSE}
 #曲线拟合
-p1 <- ggplot(df1,aes(days,predict(fm1)))+geom_line()+geom_point(aes(y=US))+geom_hline(yintercept = coef(fm1)[1],lty=2)+theme_bw()+
-  theme(panel.grid.minor = element_blank(),panel.grid.major = element_blank())+xlab("days")+ylab("Number of confirmed cases(US)")
+p1 <- ggplot(df1,aes(days,predict(fm1)))+geom_line()+geom_point(aes(y=US))+geom_hline(yintercept = coef(fm1)[1],lty=2)+theme_bw()+theme(panel.grid.minor = element_blank(),panel.grid.major = element_blank())+xlab("days")+ylab("")
 
-p2 <- ggplot(df2,aes(days,predict(fm2)))+geom_line()+geom_point(aes(y=CN))+geom_hline(yintercept = coef(fm2)[1],lty=2)+theme_bw()+
-  theme(panel.grid.minor = element_blank(),panel.grid.major = element_blank())+xlab("days")+ylab("Number of confirmed cases(CN)")
+p2 <- ggplot(df2,aes(days,predict(fm2)))+geom_line()+geom_point(aes(y=CN))+geom_hline(yintercept = coef(fm2)[1],lty=2)+theme_bw()+theme(panel.grid.minor = element_blank(),panel.grid.major = element_blank())+xlab("days")+ylab("")
 
-p3 <- ggplot(df3,aes(days,predict(fm3)))+geom_line()+geom_point(aes(y=JP))+geom_hline(yintercept = coef(fm3)[1],lty=2)+theme_bw()+
-  theme(panel.grid.minor = element_blank(),panel.grid.major = element_blank())+xlab("days")+ylab("Number of confirmed cases(JP)")
+p3 <- ggplot(df3,aes(days,predict(fm3)))+geom_line()+geom_point(aes(y=JP))+geom_hline(yintercept = coef(fm3)[1],lty=2)+theme_bw()+theme(panel.grid.minor = element_blank(),panel.grid.major = element_blank())+xlab("days")+ylab("")
 
-p4 <- ggplot(df4,aes(days,predict(fm4)))+geom_line()+geom_hline(yintercept = coef(fm4)[1],lty=2)+geom_point(aes(y=GE))+theme_bw()+
-  theme(panel.grid.minor = element_blank(),panel.grid.major = element_blank())+xlab("days")+ylab("Number of confirmed cases(GE)")
+p4 <- ggplot(df4,aes(days,predict(fm4)))+geom_line()+geom_hline(yintercept = coef(fm4)[1],lty=2)+geom_point(aes(y=GE))+theme_bw()+theme(panel.grid.minor=element_blank(),panel.grid.major = element_blank())+xlab("days")+ylab("")
 
-p5 <- ggplot(df5,aes(days,predict(fm5)))+geom_line()+geom_hline(yintercept = coef(fm5)[1],lty=2)+geom_point(aes(y=IN))+theme_bw()+
-  theme(panel.grid.minor = element_blank(),panel.grid.major = element_blank())+xlab("days")+ylab("Number of confirmed cases(IN)")
+p5 <- ggplot(df5,aes(days,predict(fm5)))+geom_line()+geom_hline(yintercept = coef(fm5)[1],lty=2)+geom_point(aes(y=IN))+theme_bw()+theme(panel.grid.minor = element_blank(),panel.grid.major = element_blank())+xlab("days")+ylab("")
 
 p6 <- ggplot(df6,aes(days,predict(fm6)))+geom_line()+geom_hline(yintercept = coef(fm6)[1],lty=2)+geom_point(aes(y=FR))+theme_bw()+
-  theme(panel.grid.minor = element_blank(),panel.grid.major = element_blank())+xlab("days")+ylab("Number of confirmed cases(FR)")
+  theme(panel.grid.minor = element_blank(),panel.grid.major = element_blank())+xlab("days")+ylab("")
 
 p7 <- ggplot(df7,aes(days,predict(fm7)))+geom_line()+geom_hline(yintercept = coef(fm7)[1],lty=2)+geom_point(aes(y=UK))+theme_bw()+
-  theme(panel.grid.minor = element_blank(),panel.grid.major = element_blank())+xlab("days")+ylab("Number of confirmed cases(UK)")
+  theme(panel.grid.minor = element_blank(),panel.grid.major = element_blank())+xlab("days")+ylab("")
 
 p8 <- ggplot(df8,aes(days,predict(fm8)))+geom_line()+geom_hline(yintercept = coef(fm8)[1],lty=2)+geom_point(aes(y=BR))+theme_bw()+
-  theme(panel.grid.minor = element_blank(),panel.grid.major = element_blank())+xlab("days")+ylab("Number of confirmed cases(BR)")
+  theme(panel.grid.minor = element_blank(),panel.grid.major = element_blank())+xlab("days")+ylab("")
 
 p9 <- ggplot(df9,aes(days,predict(fm9)))+geom_line()+geom_hline(yintercept = coef(fm9)[1],lty=2)+geom_point(aes(y=IT))+theme_bw()+
-  theme(panel.grid.minor = element_blank(),panel.grid.major = element_blank())+xlab("days")+ylab("Number of confirmed cases(IT)")
+  theme(panel.grid.minor = element_blank(),panel.grid.major = element_blank())+xlab("days")+ylab("")
 
 p10 <- ggplot(df10,aes(days,predict(fm10)))+geom_line()+geom_hline(yintercept = coef(fm10)[1],lty=2)+geom_point(aes(y=CA))+theme_bw()+
-  theme(panel.grid.minor = element_blank(),panel.grid.major = element_blank())+xlab("days")+ylab("Number of confirmed cases(CA)")
+  theme(panel.grid.minor = element_blank(),panel.grid.major = element_blank())+xlab("days")+ylab("")
 
 ggarrange(p1,p2,p3,p4,p5,p6,p7,p8,p9,p10,ncol=2,nrow=5,labels=c("US","CN","JP","GE","IN","FR","UK","BR","IT","CA"))
 ```
@@ -653,7 +648,7 @@ ggarrange(p1,p2,p3,p4,p5,p6,p7,p8,p9,p10,ncol=2,nrow=5,labels=c("US","CN","JP","
 　　上述图是利用获得Logistics增长曲线对GDP-TOP10的国家累计确诊病例数据的拟合，从图中可以看到拟合效果良好。中国、日本、德国、法国和意大利这五个国家，疫情基本稳定，总增长量基本平稳，长时间停留在渐近线附近。美国、英国和加拿大这三个国家，刚刚抵达渐进线处，疫情情况还不明朗，政府应加强控制。印度和巴西这两个国家，离渐近线较远，疫情还未达到拐点，累计确诊病例可能会继续上升。
 
 ### 4.3.3每日确诊增长率趋势分析
-```{r,out.width="100%",out.height="100%",echo=FALSE}
+```{r,fig.align='center', fig.cap=" 2019年GDP-TOP10的国家每日确诊增长率",echo=FALSE}
 #读取数据
 US_r <- GDP_10[,12]
 US_r <- unlist(US_r)
@@ -702,34 +697,34 @@ df10_r <- na.omit(df10_r)
 
 #画图
 p1_r <- ggplot(df1_r,aes(days,US_r))+geom_line()+theme_bw()+
-  theme(panel.grid.minor = element_blank(),panel.grid.major = element_blank())+xlab("days")+ylab("Daily growth rate of confirmed cases(US)")
+  theme(panel.grid.minor = element_blank(),panel.grid.major = element_blank())+xlab("days")+ylab("")
 
 p2_r <- ggplot(df2_r,aes(days,CN_r))+geom_line()+theme_bw()+
-  theme(panel.grid.minor = element_blank(),panel.grid.major = element_blank())+xlab("days")+ylab("Daily growth rate of confirmed cases(CN)")
+  theme(panel.grid.minor = element_blank(),panel.grid.major = element_blank())+xlab("days")+ylab("")
 
 p3_r <- ggplot(df3_r,aes(days,JP_r))+geom_line()+theme_bw()+
-  theme(panel.grid.minor = element_blank(),panel.grid.major = element_blank())+xlab("days")+ylab("Daily growth rate of confirmed cases(JP)")
+  theme(panel.grid.minor = element_blank(),panel.grid.major = element_blank())+xlab("days")+ylab("")
 
 p4_r <- ggplot(df4_r,aes(days,GE_r))+geom_line()+theme_bw()+
-  theme(panel.grid.minor = element_blank(),panel.grid.major = element_blank())+xlab("days")+ylab("Daily growth rate of confirmed cases(GE)")
+  theme(panel.grid.minor = element_blank(),panel.grid.major = element_blank())+xlab("days")+ylab("")
 
 p5_r <- ggplot(df5_r,aes(days,IN_r))+geom_line()+theme_bw()+
-  theme(panel.grid.minor = element_blank(),panel.grid.major = element_blank())+xlab("days")+ylab("Daily growth rate of confirmed cases(IN)")
+  theme(panel.grid.minor = element_blank(),panel.grid.major = element_blank())+xlab("days")+ylab("")
 
 p6_r <- ggplot(df6_r,aes(days,FR_r))+geom_line()+theme_bw()+
-  theme(panel.grid.minor = element_blank(),panel.grid.major = element_blank())+xlab("days")+ylab("Daily growth rate of confirmed cases(FR)")
+  theme(panel.grid.minor = element_blank(),panel.grid.major = element_blank())+xlab("days")+ylab("")
 
 p7_r <- ggplot(df7_r,aes(days,UK_r))+geom_line()+theme_bw()+
-  theme(panel.grid.minor = element_blank(),panel.grid.major = element_blank())+xlab("days")+ylab("Daily growth rate of confirmed cases(UK)")
+  theme(panel.grid.minor = element_blank(),panel.grid.major = element_blank())+xlab("days")+ylab("")
 
 p8_r <- ggplot(df8_r,aes(days,BR_r))+geom_line()+theme_bw()+
-  theme(panel.grid.minor = element_blank(),panel.grid.major = element_blank())+xlab("days")+ylab("Daily growth rate of confirmed cases(BR)")
+  theme(panel.grid.minor = element_blank(),panel.grid.major = element_blank())+xlab("days")+ylab("")
 
 p9_r <- ggplot(df9_r,aes(days,IT_r))+geom_line()+theme_bw()+
-  theme(panel.grid.minor = element_blank(),panel.grid.major = element_blank())+xlab("days")+ylab("Daily growth rate of confirmed cases(IT)")
+  theme(panel.grid.minor = element_blank(),panel.grid.major = element_blank())+xlab("days")+ylab("")
 
 p10_r <- ggplot(df10_r,aes(days,CA_r))+geom_line()+theme_bw()+
-  theme(panel.grid.minor = element_blank(),panel.grid.major = element_blank())+xlab("days")+ylab("Daily growth rate of confirmed cases(CA)")
+  theme(panel.grid.minor = element_blank(),panel.grid.major = element_blank())+xlab("days")+ylab("")
 
 ggarrange(p1_r,p2_r,p3_r,p4_r,p5_r,p6_r,p7_r,p8_r,p9_r,p10_r,ncol=2,nrow=5,labels=c("US","CN","JP","GE","IN","FR","UK","BR","IT","CA"))
 
