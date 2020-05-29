@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ---
 title: "国内外疫情态势对比分析"
 author: "刘崟  慕慧君  肖雨婷  王洁  卢晋萍"
@@ -407,25 +408,24 @@ $d^2_{ij}(M)=(x_i-x_j)'\Sigma^{-1}(x_i-x_j)$
 ## 3.2 实证分析
 
 ### 数据来源  
-
-　　数据选取的是2019年GDP前20的国家于3月20日至5月25日每日新增病例的数据.
+数据选取的是2019年GDP前10的国家于3月3日至5月25日每日新增病例的数据.数据来源于美国约翰斯·霍普金斯大学发布的疫情数据。
 
 ### 数据处理
 1、原始数据中存在许多异常值，例如负值或者0值，又或者突然出现极大值，首先查阅相关疫情报道对这些数据进行修正。  
 
-2、由于各个国家病例数相差较大，所以这里对每个国家/地区的新病例的进行归一化（（1）式），范围从0到1。
+2、由于各个国家病例数相差较大，所以这里对每个国家/地区的新病例的进行归一化（（3）式），范围从0到1。
 $$
-f(x)=\frac {x-min(x)}{max(x)-min(x)} \tag{1}
+f(x)=\frac {x-min(x)}{max(x)-min(x)} \tag{3}
 $$
 
 ### 方法选择  
 
-　　采用聚类分析中的系统聚类法对这20个国家的疫情数据进行聚类，得到的分析结果如下：
+采用聚类分析中的系统聚类法对这10个国家的疫情数据进行聚类，得到的分析结果如下：
 
 ```{r}
-
+setwd("C:/Users/15735/git/project-wonder-woman/final repo")
 library(readxl)
-x <- read.csv('data/GDP_TOP20.csv')
+x <- read.csv('data/GDP原始数据2.csv')
 msa.X<-function(df){ 
   X=df[,-1]; 
   rownames(X)=df[,1]; 
@@ -439,100 +439,112 @@ plot(H);rect.hclust(H,5)
 cutree(H,5)
 ```
 
-　　由上面的聚类分析结果可知，我们把20个国家分为了5类，第一类是美国，第二类是英国，土耳其，加拿大，和日本；第三类是俄罗斯，巴西，印度，印度尼西亚，墨西哥以及沙特阿拉伯这6个国家；划分在第四类的国家有：西班牙，德国，瑞士，韩国和澳大利亚；最后一类国家分别是：意大利，法国，中国以及荷兰。每一类国家在疫情发展的大致趋势上具有相同的走向。  
-
+　　由上面的聚类分析结果可知，我们把10个国家分为了5类，第一类是加拿大和日本，第二类是中国；第三类是意大利，德国和法国这3个国家；第四类划分的国家有：巴西和印度；最后一类国家分别是：美国和英国。每一类国家在疫情发展的大致趋势上具有相同的走向。  
 　　接下来是对每一类国家疫情发展的趋势做进一步的分析：用处理过的数据拟合其发展曲线。 
-
-　　首先，是美国，单独划分为一类，从3月中旬到现阶段，美国的疫情一直未得到很好的控制，从刚开始的指数式增长，到现在仍然保持较高的日新增患病者，疫情并未得到很好的控制，成为全球确诊病例最多的国家，也是疫情最为严重的重灾区。一方面源自于美国政府防控措施不到位，另一方面也源自于美国民众的大意，在疫情初期，不重视戴口罩等防护措施。
-
+　　首先，是加拿大和日本这两个国家,这两个国家是疫情防控措施做的较好的国家，日本自疫情在国内发展的初期就采取了严格的防控措施，使得国内疫情人数最多未超过千人；加拿大同样也在抗疫期间逐步升级其防控力度，严格把关进口，虽比邻美国，但国内疫情发展依然得到了控制。  
+　　第二类是中国，从3月份以来国内疫情基本得到了控制，所以从图中可以看出近3个月来每日新增确诊人数最多是出现在3月份初期，到最后是逐步下降的趋势，过程中出现一次波动，可能对应于国内出现无症状患者的情况，但这一情况很快也得到了控制。现在，国内的每日新增病例基本维持在2位数以内。  
+　　第三类国家有意大利，德国，法国这3个国家，这些国家都是欧洲国家，其中，以意大利为代表，从3月份以来，疫情迅速爆发，呈现出指数增长的趋势，在当时，成为全球疫情的一个重灾区，后来逐步采取封城等措施进行防控，现在，这些国家的疫情同样基本得到了控制，意大利，德国，法国等国家都开始逐步解封，恢复部分正常的生活节奏。  
+　　第四类国家巴西和印度，这两个国家的疫情情况仍然处于一种迅速爆发的状态，近期，巴西每日新增确诊人数近2万人，成为除美国之外全球第二个疫情重灾区；印度的疫情也同样严重，这可能和印度人口众多，但相关软件设施较差有关；从图上也可以看出这两个国家每日确诊人数正在快速增加。  
+　　第五类国家是美国和英国,美国一直是全球疫情最为严重的国家，近期仍然未得到很好的控制，确诊人数达到近170万人，其原因一部分源于政府在疫情爆发初期的不作为，防控措施不到位；另一方面也源自于美国公民的不在意导致疫情蔓延到如此严重的局面。英国感染人数25万左右，死亡人数超过3.6万人，成为了欧洲死亡人数最多的国家，并且英国的疫情似乎没有减弱的趋势。主要原因还要归于政府的防疫策略上，英国放弃了追踪接触者的战略，而是将检测重点放在新冠肺炎重症患者身上。导致错失尽早切断疫情传播途径的良机。最终，英国和美国还需要一段时间才能宣告抗疫的胜利。
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 library(ggplot2)
 library(reshape2)
 library(forcats)
-
-data <- read.csv("data/class1.csv")
+library(ggpubr)
+setwd("C:/Users/15735/git/project-wonder-woman/final repo/data")
+data <- read.csv("class1.csv")
 data <- melt(data,id.vars = "days", variable.name = "country", value.name = "num") 
-num <- c(runif(67), runif(67, min=0, max=1))
+num <- c(runif(83), runif(83, min=0, max=1))
 data$day <- fct_inorder(data$day)
-ggplot(data = data, mapping = aes(x = day, y = num, colour = country,group = country )) +
+p1 <- ggplot(data = data, mapping = aes(x = day, y = num, colour = country,group = country )) +
   geom_line(size = 0.5) +
   geom_point(size = 1.5) +
-  labs(title = "美国",x = '时间') +
-  theme(axis.text.x = element_text(angle = 60, hjust = 0.5, vjust =0.5 ,size = 1))
+  labs(title = "第一类",x = '时间') +
+  theme(axis.text.x = element_text(angle = 60, hjust = 0.5, vjust =0.5 ,size = 2))
 ```
 
-　　第二类是英国，日本，加拿大，土耳其这四个国家，从图中可以看出，在疫情开始在这些国内爆发的时候，发展速度还是很快的，但是，近期，一点点得到了控制。其中，日本的防疫措施采取的是很到位的，国内每日新增确诊人数未超过千人，疫情已被控制住了。加拿大自3月初国内出现第一例死亡病例后也逐步升级防控措施，严控进出关口，使其疫情的发展没有到很严重的地步；土耳其采用的是“小步快走”的策略，为了不使国内经济下滑，土耳其随疫情得发展不断调整其防控措施，每天都在公布新的防控措施；到了一定阶段，疫情相对平稳以后，再观望一下，采取下一步的措施。
+    
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 library(ggplot2)
 library(reshape2)
 library(forcats)
-
-data <- read.csv("data/class2.csv")
+library(ggpubr)
+setwd("C:/Users/15735/git/project-wonder-woman/final repo/data")
+data <- read.csv("class2.csv")
 data <- melt(data,id.vars = "days", variable.name = "country", value.name = "num") 
-num <- c(runif(67), runif(67, min=0, max=1))
+num <- c(runif(83), runif(83, min=0, max=1))
 data$day <- fct_inorder(data$day)
-ggplot(data = data, mapping = aes(x = day, y = num, colour = country,group = country )) +
+p2 <- ggplot(data = data, mapping = aes(x = day, y = num, colour = country,group = country )) +
   geom_line(size = 0.5) +
   geom_point(size = 1.5) +
   labs(title = "第二类",x = '时间') +
-  theme(axis.text.x = element_text(angle = 60, hjust = 0.5, vjust =0.5 ,size = 4))
+  theme(axis.text.x = element_text(angle = 60, hjust = 0.5, vjust =0.5 ,size = 1))
 ```
 
-　　第三类国家有俄罗斯，巴西，印度等国家，这些国家近期得疫情仍然处于一种快速发展得阶段；其中，巴西每日新增确诊人数高居1万多人，俄罗斯每日新增确诊人数约1万左右，印度每日新增确诊人数仍然在逐日上升，疫情未得到很好的控制。俄罗斯在疫情开始初期对中国方面的防控措施一直做的很到位，后期，疫情在全球范围内爆发，以致对欧美国家疫情防控的不及时，导致境内疫情的现状。
+    
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 library(ggplot2)
 library(reshape2)
 library(forcats)
-
-data <- read.csv("data/class3.csv")
+library(ggpubr)
+setwd("C:/Users/15735/git/project-wonder-woman/final repo/data")
+data <- read.csv("class3.csv")
 data <- melt(data,id.vars = "days", variable.name = "country", value.name = "num") 
-num <- c(runif(67), runif(67, min=0, max=1))
+num <- c(runif(83), runif(83, min=0, max=1))
 data$day <- fct_inorder(data$day)
-ggplot(data = data, mapping = aes(x = day, y = num, colour = country,group = country )) +
+p3 <- ggplot(data = data, mapping = aes(x = day, y = num, colour = country,group = country )) +
   geom_line(size = 0.5) +
   geom_point(size = 1.5) +
   labs(title = "第三类",x = '时间') +
-  theme(axis.text.x = element_text(angle = 60, hjust = 0.5, vjust =0.5 ,size = 6))
+  theme(axis.text.x = element_text(angle = 60, hjust = 0.5, vjust =0.5 ,size = 3))
 ```
 
-　　第四类国家是西班牙，德国，瑞士等国家，欧洲的大部分国家，这几个国家刚开始疫情发展比较迅速，近期疫情已趋于稳定，各国都开始逐步解封，每日新增确诊病例和新增死亡病例都在逐步下降。
+    
 
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 library(ggplot2)
 library(reshape2)
 library(forcats)
-
-data <- read.csv("data/class4.csv")
+library(ggpubr)
+setwd("C:/Users/15735/git/project-wonder-woman/final repo/data")
+data <- read.csv("class4.csv")
 data <- melt(data,id.vars = "days", variable.name = "country", value.name = "num") 
 num <- c(runif(67), runif(67, min=0, max=1))
 data$day <- fct_inorder(data$day)
-ggplot(data = data, mapping = aes(x = day, y = num, colour = country,group = country )) +
+p4 <- ggplot(data = data, mapping = aes(x = day, y = num, colour = country,group = country )) +
   geom_line(size = 0.5) +
   geom_point(size = 1.5) +
   labs(title = "第四类",x = '时间') +
-  theme(axis.text.x = element_text(angle = 60, hjust = 0.5, vjust =0.5 ,size = 5))
+  theme(axis.text.x = element_text(angle = 60, hjust = 0.5, vjust =0.5 ,size = 2))
 ```
 
-　　第五类国家是中国，意大利，法国和荷兰，疫情发展的大的趋势是逐步得到控制的，其中，中国的疫情出现了一次波动，这可能是由于国内无症状患者的出现。
+    
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 library(ggplot2)
 library(reshape2)
 library(forcats)
-
-data <- read.csv("data/class5.csv")
+library(ggpubr)
+setwd("C:/Users/15735/git/project-wonder-woman/final repo/data")
+data <- read.csv("class5.csv")
 data <- melt(data,id.vars = "days", variable.name = "country", value.name = "num") 
-num <- c(runif(67), runif(67, min=0, max=1))
+num <- c(runif(83), runif(83, min=0, max=1))
 data$day <- fct_inorder(data$day)
-ggplot(data = data, mapping = aes(x = day, y = num, colour = country,group = country )) +
+p5 <- ggplot(data = data, mapping = aes(x = day, y = num, colour = country,group = country )) +
   geom_line(size = 0.5) +
   geom_point(size = 1.5) +
   labs(title = "第五类",x = '时间') +
-  theme(axis.text.x = element_text(angle = 60, hjust = 0.5, vjust =0.5 ,size = 5))
+  theme(axis.text.x = element_text(angle = 60, hjust = 0.5, vjust =0.5 ,size = 2))
 ```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+ggarrange(p1,p2,p3,p4,p5,ncol=2,nrow=3,labels=c(" ","  "," "," "," "))
+```
+
+
 >>>>>>> 8a43eccac13adedffc7023bcc4172ccb37a79d16
 
 # 4 趋势拟合及预测
@@ -877,29 +889,39 @@ ggarrange(p1_r,p2_r,p3_r,p4_r,p5_r,p6_r,p7_r,p8_r,p9_r,p10_r,ncol=2,nrow=5,label
 
 **（1）“纵观世界风云，这边风景独好”**
 
-通过对COVID-19每日新增数据的可视化，可以直观地对各国疫情发展有全局的把握。中国、韩国等虽然属于最早出现疫情的一批国家，但是由于国家政府采取强有力的疫情控制政策和大多数民众的配合，尤其是中国，使得本国疫情得到很好的控制。从全球归一化的每日新增病例动态图可以看出，中韩两国在三月左右先后出现拐点，说明两国疫情从爆发到得到基本控制仅花费一个月左右的时间。
+通过对COVID-19每日新增数据的可视化，可以直观地对各国疫情发展有全局的把握。中国、韩国等虽然属于最早出现疫情的一批国家，但是由于国家政府采取强有力的疫情控制政策和大多数民众的配合，尤其是中国，使得本国疫情得到很好的控制。从全球归一化的每日新增病例动态图可以看出，中韩两国在三月左右先后出现拐点（即单日新增最高值），说明两国疫情从爆发到得到基本控制仅花费一个月左右的时间。
 
 从GDP前10的国家的疫情累计确诊对比分析可以看出，在同样的时间跨度，中国抗疫进入成果保卫战阶段，目前主要任务是在如何实现全面复工复产的同时防止疫情的反复。日本在疫情大规模爆发后，开始学习中国科学抗疫，在近几日增长较为平缓,按目前趋势线所示疫情也得到基本控制。进一步的，通过对Logistic增长曲线的估计参数Asym排序，得出的结论也与描述统计部分一致，中国和日本的最终流行规模预测值分别为4.66和7.93在疫情由高到低的顺序中分别为第九和第十。。而且利用Logistic增长曲线对GDP前10的国家累计确诊病例数据的拟合可以看出中国和日本疫情基本得到控制，总增长量基本平稳，长时间停留在渐近线附近。并且从每日确诊增长率折线图可以看到中国每日确诊增长率已长时间趋于0；日本每日确诊增长率也开始趋于0，为0.0008。
 
 
 **（2）“革命尚未成功，同志仍需努力”**
 
+<<<<<<< HEAD
 虽然通过Logistic增长曲线对德国、法国和意大利这三个国家累计确诊病例数据的拟合，拟合结果与中日相似，总增长量基本平稳，长时间停留在渐近线附近，聚类分析的结果也与此基本一致。虽然聚类结果将德中法意四国归为一类，但综合所有分析来看，这三个国家与中国的情况并不相同，这三个国家每日确诊增长率在0.002附近，并且从GdP前10的死亡率折线图可以看出，法国死亡率目前已经超过的19%,目前还在快速增长；意大利的死亡率近来在14%波动；德国得益于健全医疗体系等国情死亡率至今还未超过5%，但是整体来看还是需要还处于疫情防控的攻坚阶段，谨防后续时间疫情突然出现反跳的情况。
+=======
+虽然通过Logistics增长曲线对德国、法国和意大利这三个国家累计确诊病例数据的拟合，拟合结果与中日相似，总增长量基本平稳，长时间停留在渐近线附近。聚类分析的结果也于此想照应，虽然聚类结果将德中法意四国归为一打雷，但结合前两者的分析，与中国的情况并不相同，这三个国家每日确诊增长率在0.002附近，并且从TOP10的死亡率折线图可以看出，法国死亡率目前已经超过的19%,目前还在快速增长；意大利的死亡率近来在14%波动；德国得益于健全医疗体系等国情死亡率至今还未超过5%，但是整体来看还是需要还处于疫情防控的攻坚阶段，谨防后续时间疫情突然出现反跳的情况。
+>>>>>>> fd8fc9b1de3f738e8932e457fb312558058f8676
 
 **（3）”黎明之前最黑暗"**
 
 通过前文的分析，虽然美国、英国、加拿大、印度和巴西这五个国家目前疫情均不乐观，但根据聚类分析的结果并结合国家政府对待疫情态度的不同，抗疫政策的差异以及综合国力的差距，各国疫情如此严重的成因各不相同。
 
+<<<<<<< HEAD
 根据Logistic增长曲线拟合的分析，美国、英国和加拿大这三个国家，刚刚抵达渐进线处，且通过对GDP前10最终流行规模预测值的排序，美国第一位，英国第四位，加拿大第七位。，截至5月28日美国累计确诊人数已经超过了115万人，虽然美国目前GDP排名第一，国家综合实力也处于领先地位，但是由于国家领导人对疫情的不重视和不当的抗疫政策，导致美国即使拥有先进的医疗技术和最好的医疗资源，却沦为新冠疫情的“重灾区”。3月5日，英国出现首例死亡病例，距今已有74天，但累计确诊至今仍在缓慢增长，拐点也仍未出现，并且英国的死亡率超过10%，截至目前虽有所回落，但仍在14%波动。加拿大地广人稀，在一定程度上对疫情的传播起到了阻碍作用，但是截至5月28日，加拿大累计确诊也达88989，较上日新增899例，所以加拿大目前疫情情况还不明朗，但疫情严重程度较英美两国轻。
 
 印巴属于发展中国家，医疗水平与欧美发达国家相比有很大差距。截至5月28日，巴西、印度的疫情还在进一步恶化,累计确诊病例增速加快，并且通过拟合，印巴两国的拟合曲线离渐近线较远，疫情还未达到拐点，累计确诊病例可能会继续上升。截至目前，印度累计确诊已逾15万人。虽然相比美国、英国而言，印度的疫情并不严重，而且死亡率也没有意大利等国家高。但是在隐患上来看，印度最高。之所以这样说是因为，印度是个拥有13亿人口的人口大国，医疗卫生水平落后，贫富差距悬殊，还有之前蝗灾的影响，印度如今的日检测量以及规模都比较小，加上检测试剂等物资不足，这些都使得印度无法开展全国性的疫情排查。巴西总统在疫情期间仍然鼓励民众继续上街，一方面由于巴西医疗水平较差，医疗设施落后，不足以支撑大规模的核酸检测，另一方面是巴西属于出口型国家，受到疫情的冲击，经济发展困难导难以支撑国家福利。
+=======
+根据Logistics增长曲线拟合的分析，美国、英国和加拿大这三个国家，刚刚抵达渐进线处，且通过对GDP前10最终流行规模预测值的排序，美国第一位，英国第四位，加拿大第七位。，截至5月28日美国累计确诊人数已经超过了115万人，虽然美国目前GDP排名第一，国家综合实力也处于领先地位，但是由于国家领导人对疫情的不重视和不当的抗疫政策，导致美国成为此次疫情中，累计确诊人数和累计死亡人数前三的国家。3月5日，英国出现首例死亡病例，距今已有74天，累计确诊至今仍在缓慢增长，拐点仍未出现，并且英国的死亡率超过10%，在目前虽有所回落，但仍在14%波动。加拿大地广人稀，在一定程度上对疫情的传播起到了阻碍作用，所以虽然加拿大目前疫情情况虽然还不明朗，但疫情严重程度较英美两国轻。
+
+截至5月28日，巴西、印度的疫情还在进一步恶化,累计确诊病例增速加快，并且通过拟合，印巴两国的拟合曲线离渐近线较远，疫情还未达到拐点，累计确诊病例可能会继续上升。印度由于人口众多，医疗卫生水平落后，贫富差距悬殊，还有之前蝗灾的影响，截至5月28日，累计确诊已逾15万人。巴西总统在疫情期间仍然鼓励民众继续上街，一方面由于巴西医疗水平较差，医疗设施落后，不足以支撑大规模的核酸检测，另一方面是巴西属于出口型国家，受到疫情的冲击，经济发展困难导难以支撑国家福利。
+>>>>>>> fd8fc9b1de3f738e8932e457fb312558058f8676
 
 
 ## 5.2 建议
 
 中国目前绝大部分省市已经实现稳定有序的复工复产，这对全球各国如何度过疫情时期以及实现科学有序的复工复产都具有十分重要的借鉴意义。结合分析结果，建议部分只对处在疫情不同发展阶段的国家提出是否可进行复工复产的建议，由于各国国情的不同，没有具体的复工复产建议。
 
-对于像日本这样疫情已经得到基本控制的国家，可以在新增确诊实现零增长并度过一段时间的潜伏观察期，分行业有序科学实现复工复产，但仍要警惕境外输入以及做好集聚场所，如学校、看守所、养老院等防控工作，防止疫情出现再次爆发。对于像德法意此类的国家疫情开始出现缓和的国家，也不要放松警惕，继续做好疫情的防控工作，民众也要积极配合政府的抗疫政策，配合隔离措施，既可避免疫情的再次爆发也为后面复工复产的实现奠定良好的基础。而对于英美加以及印巴此类疫情仍然严峻的国家，尤其是美国，建议执行强有力的疫情防控政策，在疫情未得到有效控制之前，不建议实行复工复产。
+对于像日本这样疫情已经得到基本控制的国家，可以在新增确诊实现零增长并度过一段时间的潜伏观察期，分行业有序科学实现复工复产，但仍要警惕境外输入以及做好集聚场所，如学校、看守所、养老院等防控工作，防止疫情出现再次爆发。对于像德法意此类的国家疫情开始出现缓和的国家，也不要放松警惕，继续做好疫情的防控工作，民众也要积极配合政府的抗疫政策，配合隔离措施，既可避免疫情的再次爆发也为后面复工复产的实现奠定良好的基础。而对于英美加以及印巴此类国家，尤其是美国，建议执行强有力的疫情防控政策，在疫情未得到有效控制之前，不建议实行复工复产。
 
 
 
@@ -922,4 +944,943 @@ ggarrange(p1_r,p2_r,p3_r,p4_r,p5_r,p6_r,p7_r,p8_r,p9_r,p10_r,ncol=2,nrow=5,label
 
 [6]杨雨琦,孙琦,王悦欣,严雪凌,乐涛.重庆市新型冠状病毒肺炎(NCP)疫情分析与趋势预测[J].重庆师范大学学报(自然科学版),2020,37(01):135-140.
 
+=======
+---
+title: "国内外疫情态势对比分析"
+author: "刘崟  慕慧君  肖雨婷  王洁  卢晋萍"
+date: "2020/5/29"
+geometry:
+- lmargin=2.5cm
+- rmargin=2.5cm
+fontsize: 12
+output: 
+  html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# 摘要
+
+
+
+# 1 引言
+
+## 1.1 背景与目的
+
+　　2020年初，不明原因的病毒性肺炎在中国武汉市爆发，随后，其病原体被确定为新型冠状病毒，并在全球多个国家相继出现。根据世界卫生组织报告，1月11日，西太平洋地区出现41例确诊病例，1月13日，东南亚出现1例确诊病例，1月20日，美洲出现1例确诊病例，1月24日，欧洲出现3例确诊病例，1月29日，地中海东部地区出现4例确诊病例，2月25日，非洲出现1例确诊病例。截止5月12日 6:42 CEST（Central Europe Summer Time ， 西 太 平 洋 地 区 新 冠 肺炎累积确诊病例已达到161872例，东南亚地区累积确诊107354例，美洲累积确诊1743717例，欧洲累积确诊1755790例，地中海东部地区累积确诊281744例，非洲累积确诊46829例。
+    
+　　从以上数据可以看出，同一病毒性肺炎在不同地区和国家呈现出不同的发展态势。研究疫情发展规律，掌握疫情的发展态势，有利于政府安抚民心以及科学有效地制定防控政策。本文对全球疫情的发展态势进行了可视化分析，然后选取一些代表性国家对新冠肺炎的不同发展趋势类型进行了分析，并对各个国家肺炎发展趋势进行了拟合和预测，为科学有效地控制疫情提供相关建议。
+
+## 1.2 文献综述
+
+　　随着新型冠状病毒肺炎的全球蔓延，关于新冠肺炎疫情的相关研究也日渐增多。其中，对新冠肺炎疫情发展态势的研究早在疫情爆发的初期就已引起学者们的关注。
+
+　　杨安吉，颜忠诚运用logistics模型对新冠肺炎的发展趋势进行了研究和解释，结果表明，logistic增长曲线的拟合值与实际观测数据差异较小，中国内地COVID-19疫情的累积确诊患者病例数、累积治愈患者例数和累计死亡患者例数变化趋势基本符合logistic增长曲线。可以看出logistic模型对疫情的发展趋势具有较好的拟合效果；易大莉等人使用聚类分析方法对新冠病毒肺炎疫情的发展进行区域差异分析；武文涛等人运用SIR模型，通过计算和预测广东省新型冠状病毒肺炎的基本再生数,研究广东省疫情的流行趋势为其防控和相关政策支持提供依据；杨宇琦等人使用官方数据,计算出此次疫情确诊病例环比增长率、治愈率和死亡率,绘制变化曲线图分析疫情发展态势，并建立SIR传染病模型进行趋势预测；张荣强等人采用Excel、Origin软件开展H1N1和COVID-19的描述性流行病学分析，并分析二者的变化规律，探讨和比较2019冠状病毒病（COVID-19）和甲型流感（2009-H1N1）疫情初期的变化趋势及流行特征；方法上，《Generalized logistic growth modeling of the COVID-19 outbreak  
+in 29 provinces in China and in the rest of the world 》一文将logistic增长模型、广义logistic增长模型、广义增长模型和广义Richards模型与1月19日至3月10日全国、29个省、4个重灾区和整个欧洲的报告感染病例数进行了校正。不同的模型提供了各个场景预测的上下限。
+
+　　以上文献多是关于局部地区的新冠肺炎疫情发展趋势的分析，方法上多用到SIR模型以及logistic增长模型，而关于全球性的疫情态势分析极少。本文着眼全球疫情角度，对国内外疫情发展态势进行分析，从多角度对全球疫情发展态势进行刻画，由于分析的国家地区较多，使用SIR模型需要考虑的额外因素较多，因此本文在进行趋势拟合和预测时采用了logistic增长模型进行分析，并根据所得的结论为抵制新冠病毒肺炎疫情提供相关建议
+
+## 1.3 写作框架及主要内容
+
+　　1、基于全球疫情态势的描述性统计分析。这部分内容从不同角度，选取不同指标对全球疫情的发展态势进行了刻画和分析。
+　　
+　　2、聚类分析。对2019年GDP排名前10的国家的疫情发展进行聚类，分析区域差异。
+　　
+　　3、趋势拟合及预测。对2019年GDP排名前10的国家进行新冠肺炎累积确诊病例的拟合和预测。
+　　
+　　4、总结。总结前文的分析结果，并结合各个国家的实际情形和相关政策，为抵抗疫情提供合理建议。
+
+# 2 描述性统计分析
+
+## 2.1 全球每日新增病例
+
+　　对各国每日新增病例进行比较分析，取2019-12-31日至2020-05-28的各国COVID-19每日新增病例的数据[数据来源](https://covid.ourworldindata.org/data/ecdc/full_data.csv)，对比各国COVID-19发展的速度和各国的对抗效力。由于各个国家病例数相差较大，所以这里对每个国家/地区的新增病例的进行归一化（（1）式），范围从0到1。公式如下：
+
+$$
+f(x)=\frac {x-min(x)}{max(x)-min(x)} \tag{1}
+$$
+
+　　现实中的数据并不像数学中的函数那样光滑，每日新增病例具有一定的波动性，单日新增最大值出现并不意味着拐点出现，因此，当持续一段时间的总体趋势在下降，或者连续一段时间下降，才能说一个地区疫情的拐点确实到来了。
+
+　　图1这种生动的可视化聚焦于病毒从中国开爆发，随后病毒在世界其他地区扩散的时间顺序。为了增强视觉效果，根据每个国家/地区达到每日病例高峰（深红色框）的日期，将前90个国家/地区放在两个半对角线上。
+
+
+```{r, fig.align='center', fig.cap="图1 全球归一化的每日新增病例动态图", echo = FALSE, message=FALSE}
+library(tidyverse)
+library(reshape2)
+library(purrrlyr)
+
+# download dataset
+df <- read_csv('data/full_data.csv')
+
+# normalization function
+fun_normalize <- function(x) {
+  return ((x - min(x)) / (max(x) - min(x)))
+}
+
+# preprocess data
+df_prep <- df %>%
+  filter(location != 'World') %>%
+  
+  group_by(location) %>%
+  # remove earlier dates
+  filter(date > as.Date('2020-01-15', format = '%Y-%m-%d')) %>%
+  # remove coutries with less than 1000 total cases
+  filter(max(total_cases) > 1000) %>%
+  # replace negative values with the mean 
+  mutate(new_cases = ifelse(new_cases < 0,
+                            round((lag(new_cases, default = 0) + lead(new_cases, default = 0)) / 2),
+                            new_cases)) %>%
+  ungroup() %>%
+  select(location, date, new_cases) %>%
+  # prepare data for normalization
+  dcast(., date ~ location, value.var = 'new_cases') %>%
+  # replace NAs with 0
+  dmap_at(c(2:ncol(.)), function(x) ifelse(is.na(x), 0, x)) %>%
+  # normalization
+  dmap_at(c(2:ncol(.)), function(x) fun_normalize(x)) %>%
+  melt(., id.vars = c('date'), variable.name = 'country') %>%
+  mutate(value = round(value, 6))
+
+
+# define countries order for plots
+country_ord_1 <- df_prep %>%
+  group_by(country) %>%
+  filter(value == 1) %>%
+  ungroup() %>%
+  arrange(date, country) %>%
+  distinct(country) %>%
+  mutate(is_odd = ifelse((row_number() - 1) %% 2 == 0, TRUE, FALSE))
+
+country_ord_anim <- bind_rows(country_ord_1 %>%
+                                filter(is_odd == TRUE) %>%
+                                arrange(desc(row_number())),
+                              country_ord_1 %>%
+                                filter(is_odd == FALSE))
+
+# data for animated plot
+df_plot_anim <- df_prep %>%
+  mutate(country = factor(country, levels = c(as.character(country_ord_anim$country)))) %>%
+  group_by(country) %>%
+  mutate(first_date = min(date[value >= 0.03])) %>%
+  mutate(cust_label = ifelse(date >= first_date, as.character(country), '')) %>%
+  ungroup()
+
+
+# color palette
+cols <- c('#e7f0fa','#c9e2f6', '#95cbee', '#0099dc', '#4ab04a', '#ffd73e', '#eec73a', '#e29421', '#e29421', '#f05336', '#ce472e')
+
+
+# Animated Heatmap plot
+p <- ggplot(df_plot_anim, aes(y = country, x = date, fill = value)) +
+  theme_minimal() +
+  geom_tile(color = 'white', width = .9, height = .9) +
+  scale_fill_gradientn(colours = cols, limits = c(0, 1),
+                       breaks = c(0, 1),
+                       labels = c('0', 'max'),
+                       guide = guide_colourbar(ticks = T, nbin = 50, barheight = .5, label = T, barwidth = 10)) +
+  
+  geom_text(aes(x = first_date, label = cust_label), size = 3, color = '#797D7F') +
+  scale_y_discrete(position = 'right') +
+  coord_equal() +
+  
+  theme(legend.position = 'bottom',
+        legend.direction = 'horizontal',
+        plot.title = element_text(size = 20, face = 'bold', vjust = 2, hjust = 0.5),
+        axis.text.x = element_text(size = 8, hjust = .5, vjust = .5, face = 'plain'),
+        axis.text.y = element_blank(),
+        axis.title.y = element_blank(),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank()
+  ) +
+  ggtitle('全球COVID-19传播：归一化的每日新增病例')
+
+
+# animated chart
+library(gganimate)
+library(gifski)
+
+anim <- p + 
+  transition_components(date) +
+  ggtitle('全球COVID-19传播：归一化的每日新增病例',
+          subtitle = 'Date {frame_time}') +
+  shadow_mark()
+
+animate(anim,
+        nframes = as.numeric(difftime(max(df_plot_anim$date), min(df_plot_anim$date), units = 'days')) + 1,
+        duration = 12,
+        fps = 12,
+        width = 1000,
+        height = 840,
+        start_pause = 5,
+        end_pause = 25,
+        renderer = gifski_renderer())
+
+```
+
+　　为了进行更详细的分析，创建了图2，它与图1的动画相同，但是国家/地区从下到上排序。从图2中可以看到，1月的下旬COVID-19开始在中国爆发，到三月左右国内疫情基本得到控制，每日新增数变得很少；紧随中国之后的是韩国，3月初出现单日新增最高值（首现拐点），持续了几天数量较大的单日新增，之后单日新增数量保持在较小值的一定范围波动。
+
+```{r, fig.width =10, fig.height = 8, fig.align='center',  fig.cap="图2 全球归一化的每日新增病例", echo=FALSE, message=FALSE}
+# Heatmap plot 1
+df_plot_1 <- df_prep %>%
+  mutate(country = factor(country, levels = c(as.character(country_ord_1$country)))) %>%
+  group_by(country) %>%
+  mutate(first_date = min(date[value >= 0.03])) %>%
+  ungroup()
+
+ggplot(df_plot_1, aes(y = country, x = date, fill = value)) +
+  theme_minimal() +
+  geom_tile(color = 'white', width = .9, height = .9) +
+  scale_fill_gradientn(colours = cols, limits = c(0, 1),
+                       breaks = c(0, 1),
+                       labels = c('0', 'max'),
+                       guide = guide_colourbar(ticks = T, nbin = 50, barheight = .5, label = T, barwidth = 10)) +
+  
+  geom_text(aes(x = first_date, label = country), size = 3, color = '#797D7F') +
+  scale_y_discrete(position = 'right') +
+  coord_equal() +
+  
+  theme(legend.position = 'bottom',
+        legend.direction = 'horizontal',
+        plot.title = element_text(size = 20, face = 'bold', vjust = 2, hjust = 0.5),
+        axis.text.x = element_text(size = 8, hjust = .5, vjust = .5, face = 'plain'),
+        axis.text.y = element_text(size = 6, hjust = .5, vjust = .5, face = 'plain'),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank()
+  ) 
+```
+
+　　图3以每日最多新增病例为中心，该图显示了前一阶段和后续阶段的时间和强度。图中可以看到，中国的单日新增最大值基本就是拐点，之后每日新增连续下降；意大利、德国、西班牙、法国等出现单日新增最大之后，还持续了较长一段时间的增减反复，才迎来了拐点；而英国达到每日新增病例最大值后的近一个月还未迎来拐点。美国在出现单日新增最大之后，每日新增还在较大值波动，也就是说美国的新冠累计确诊还在较大的增长，拐点还未显现。
+
+```{r, fig.width = 10, fig.height = 6, fig.align='center',  fig.cap="图3 各国对抗COVID-19的效力比较", echo=FALSE, message=FALSE}
+# Heatmap plot 2
+df_plot_2 <- df_prep %>%
+  group_by(country) %>%
+  filter(date >= min(date[value > 0])) %>%
+  arrange(date, .by_group = TRUE) %>%
+  mutate(centr_day = min(row_number()[value == 1]),
+         n_day = row_number() - centr_day) %>%
+  ungroup()
+
+country_ord_2 <- df_plot_2 %>%
+  group_by(country) %>%
+  filter(date >= min(date[value == 1])) %>%
+  summarise(value = sum(value)) %>%
+  ungroup() %>%
+  arrange(value, country) %>%
+  distinct(country)
+
+df_plot_2 <- df_plot_2 %>%
+  mutate(country = factor(country, levels = c(as.character(country_ord_2$country)))) %>%
+  group_by(country) %>%
+  mutate(first_date = min(n_day[value >= 0.01])) %>%
+  ungroup()
+
+
+# Heatmap plot 2
+ggplot(df_plot_2, aes(y = country, x = n_day, fill = value)) +
+  theme_minimal() +
+  geom_tile(color = 'white', width = .9, height = .9) +
+  scale_fill_gradientn(colours = cols, limits = c(0, 1),
+                       breaks = c(0, 1),
+                       labels = c('0', 'max'),
+                       guide = guide_colourbar(ticks = T, nbin = 50, barheight = .5, label = T, barwidth = 10)) +
+  
+  geom_text(aes(x = first_date, label = country), size = 3, color = '#797D7F') +
+  coord_equal() +
+  
+  theme(legend.position = 'bottom',
+        legend.direction = 'horizontal',
+        plot.title = element_text(size = 20, face = 'bold', vjust = 2, hjust = 0.5),
+        axis.text.x = element_text(size = 8, hjust = .5, vjust = .5, face = 'plain'),
+        #axis.text.y = element_text(size = 6, hjust = .5, vjust = .5, face = 'plain'),
+        axis.text.y = element_blank(),
+        axis.title.y = element_blank(),
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank()
+  ) 
+
+```
+
+
+## 2.2 2019年GDP前十各国疫情态势对比
+
+　　此次选取了2019年GDP前10的国家进行疫情累计确诊的对比分析，GDP前十的国家中大多数都是在国际上有一定影响力的发达国家，且国家综合实力较强，或者是发展中的人口大国。如果大国在抗疫方面做的很好，就可以帮助一些国家实力较弱的国家进行抗疫；如果大国自己的疫情都不能控制，那么我们极有可能会较长时间的跟病毒做斗争。
+
+　　为了直观的比较各国疫情时间发展，横轴取各国第100例病人确诊的时间作为起始点，因为中国跨度较大，且后期疫情数据变化微小，发展时间最多取100天，由于美国累计确诊人数较多，纵轴数值较大，导致其他国家的累计确诊人数的曲线轨迹不明显；因此取这十个国家中累计确诊人数第二多的巴西作为纵轴取值标准。
+
+　　图4中红色虚线代表美国，可以看到在确诊第100例新冠肺炎之后的35天左右，美国累计确诊人数已经超过了35万人；同样的时间跨度，中国抗疫已经接近后期，剩余的8个国家累计确诊还处在不同程度的增长阶段。
+
+　　在拐点方面，可以看到疫情较为严重的欧洲：意大利、德国和法国均在出现累计确诊第100例病人40多天后出现了拐点；至5月28日，英国距离出现第100例COVID-19累计确诊病例过了80天，图中英国显示累计确诊病例增速放缓，如果未来一段时间能够加强疫情防控，相信拐点很快将会到来；同时，巴西、印度的疫情还在进一步恶化，特别是巴西最近累计确诊人数急速上升，不到20天已经超越了意大利,累计确诊病例增速加快。日本的在近5月28日几天增长较为平缓，只要后续时间疫情突然反跳的情况，按照目前的趋势日本的COVID-19基本得到控制。
+
+```{r, fig.align='center',  fig.cap="图4 2019年GDP前十国家累计确诊数比较", echo=FALSE, message=FALSE}
+GDP_10 <- read_csv('data/GDP_10.csv')
+
+days <- GDP_10[,1]
+days<-unlist(days)
+tc <- GDP_10[,9]
+tc<-unlist(tc)
+US <- GDP_10[,2]
+US<-unlist(US)
+CN <- GDP_10[,3]
+CN<-unlist(CN)
+JP <- GDP_10[,4]
+JP<-unlist(JP)
+DE <- GDP_10[,5]
+DE<-unlist(DE)
+IN <- GDP_10[,6]
+IN<-unlist(IN)
+FR <- GDP_10[,7]
+FR<-unlist(FR)
+UK <- GDP_10[,8]
+UK<-unlist(UK)
+BR <- GDP_10[,9]
+BR<-unlist(BR)
+IT <- GDP_10[,10]
+IT<-unlist(IT)
+CA <- GDP_10[,11]
+CA<-unlist(CA)
+plot(tc~days, type = "l", lty=1)
+lines(US~days, col = "red", lty=2)
+lines(CN~days, col = "red", lwd=2, lty=1)
+lines(JP~days, col = "yellow",lwd=2, lty=1)
+lines(DE~days, col = "green",lwd=2, lty=1)
+lines(IN~days, col = "grey", lwd=2,lty=1)
+lines(FR~days, col = "blue",lwd=2, lty=1)
+lines(UK~days, col = "black", lwd=2,lty=1)
+lines(BR~days, col = "orange",lwd=2, lty=1)
+lines(IT~days, col = "brown", lwd=2,lty=1)
+lines(CA~days, col = "purple", lwd=2,lty=1)
+legend("topleft",cex=0.5,c("CN","JP","DE","IN", "FR", "UK", "BR", "IT", "CA"),col=c("red","yellow","green","grey", "blue", "black","orange", "brown", "purple"),lty=1)
+```
+
+　　由于各国确诊人数相差较大，比较各国累计死亡人数意义不大。这里将采用COVID-19各国累计死亡人数占累计确诊人数的比例来作为死亡率，公式为：
+$$dr=\frac {TotalDeaths}{TotolCases}*100  \tag{2}$$
+
+　　图5展示了2019年GDP前十的国家出现第一例COVID-19h患者死亡后至2020年5月28日的死亡率的变化，横轴为各国出现第一例患者死亡后的时间跨度，纵轴为各国死亡率（%）。从图中可以看出，在出现COVID-19患者死亡初期，由于累计确诊人数少，死亡率会有较大的波动，随着累计确诊人数增多（分母增多），死亡率呈一定的趋势波动。累计确诊人数遥遥领先的美国，最近一个多月死亡率在却在6%上下波动；反而是累计确诊人数不到15万人的法国，死亡率快速增长，目前已经超过的19%；虽然日本近日的死亡率呈一定的上升趋势，但能够加强疫情防控，参考中国的死亡率，这种趋势不会持续上升。除此之外，意大利的死亡率近来在14%波动；英国的死亡率在升到超过15%后，缓降至14%波动。这些线图中最令人惊讶的是德国，德国的累计确诊人数虽然不是最多，却是高于法国的，从图4中也能看出；而德国的死亡率至今从未超过5%，且最近增速平缓，德国能做到这一点除了健全医疗体系、充足医疗储备之外，也和德国强大的科研能力以及特殊的社会、家庭结构紧密相关。[这篇报道](https://baijiahao.baidu.com/s?id=1663506858709406024&wfr=spider&for=pc)很好的解释了德国能够做到低死亡率、高治愈率的原因。
+　　
+```{r, fig.align='center',  fig.cap="图5 2019年GDP前十国家COVID-19死亡率比较", echo=FALSE, message=FALSE}
+GDP_10_dr <- read_csv('data/GDP_10_dr.csv')
+days <- GDP_10_dr[,1]
+days<-unlist(days)
+dr <- GDP_10_dr[,7]
+dr<-unlist(dr)
+US <- GDP_10_dr[,2]
+US<-unlist(US)
+CN <- GDP_10_dr[,3]
+CN<-unlist(CN)
+JP <- GDP_10_dr[,4]
+JP<-unlist(JP)
+DE <- GDP_10_dr[,5]
+DE<-unlist(DE)
+IN <- GDP_10_dr[,6]
+IN<-unlist(IN)
+FR <- GDP_10_dr[,7]
+FR<-unlist(FR)
+UK <- GDP_10_dr[,8]
+UK<-unlist(UK)
+BR <- GDP_10_dr[,9]
+BR<-unlist(BR)
+IT <- GDP_10_dr[,10]
+IT<-unlist(IT)
+CA <- GDP_10_dr[,11]
+CA<-unlist(CA)
+plot(dr~days, type = "l", lty=1)
+lines(US~days, col = "cornflowerblue", lty=1)
+lines(CN~days, col = "red", lwd=2, lty=1)
+lines(JP~days, col = "yellow",lwd=2, lty=1)
+lines(DE~days, col = "green",lwd=2, lty=1)
+lines(IN~days, col = "grey", lwd=2,lty=1)
+lines(FR~days, col = "blue",lwd=2, lty=1)
+lines(UK~days, col = "black", lwd=2,lty=1)
+lines(BR~days, col = "orange",lwd=2, lty=1)
+lines(IT~days, col = "brown", lwd=2,lty=1)
+lines(CA~days, col = "purple", lwd=2,lty=1)
+legend("topleft",cex=.5,c( "US", "CN","JP","DE","IN", "FR", "UK", "BR", "IT", "CA"),col=c( "cornflowerblue","red","yellow","green","grey", "blue", "black","orange", "brown", "purple"),lty=1)
+```
+
+
+# 3 聚类分析
+
+## 3.1 聚类分析简介
+
+　　统计学中，聚类分析是将随机现象进行归类的统计学方法，已广泛应用于医学科学研究之中。聚类分析也成为群分析、点群分析，是研究分类的一种多元统计方法。
+　　
+
+### （1）基本思想
+
+　　由于研究的样品或指标（变量）之间存在着程度不同的相似性（亲疏关系），故可根据一批样本的多个观测指标，具体找出一些能够度量样品或指标之间相似程度的统计量，以这些统计量为划分类型的依据，把一些相似程度较大的样品进行（或指标）聚合为一类，把另外一些彼此之间相似程度较大的样品（或指标）又聚合为另一类，关系密切的聚合到一个小的分类单位，关系疏远的聚合到一个大的分类单位，直到把所有的样品（或指标）聚合完毕，这就是聚类的基本思想。
+
+
+### （2）聚类分析的统计量
+
+　　　通常根据分类对象的不同，将聚类分析分为Q型聚类分析和R型聚类分析两大类。根据本报告进行聚类分析所使用的数据以及聚类的目的，进行的聚类分析属于Q型聚类分析，即样本聚类分析。而不管是Q型聚类还是R型聚类，关键在于如何让定义相似性，即如何将其数量化。聚类分析中用来衡量样本个体直接按属性相似程度的统计量以及指标变量之间属性相似程度的统计量是不一样的，前者使用统计量是距离系数，后者使用的统计量是相似系数。常用的距离系数分别由明氏距离、马氏距离、兰氏距离和类间距离。
+
+　　设有n个样本，p个指标，因此可以构成一个$n \times p$维的数据矩阵。由于每个样本有p个指标，故可将每个样本看作p维空间中的一个点，n个样本就构成了p维空间中的n个点。因此，可以用距离来度量样本之间的接近程度。令$x_i=(x_{i1},…,x_{it},…,x_{ip})^T$是第i个样本观察值，$x_j=(x_{j1},…,x_{jt},…,x_{jp})^T$是第j个样本观察值，那么这两个样本$x_i$和$x_j$之间几个常用的距离系数如下所示：
+
+### （1）明氏距离
+
+　　公式:
+
+<br>$d_{ij}(q)=[\sum_{t=1}^{p} \rvert x_{it}-x_{jt} \lvert^q]^{1/q}$
+
+　　当q=1是，为绝对距离。当q=2是，为欧式距离。当q=3是，为切比雪夫距离。当各个变量测量值差距悬殊是，直接计算其明氏距离进行聚类并不合理，需要先对数据进行标准化的处理，然后用标准化后的数据计算距离。明氏距离，特别是其中的欧式距离是人们较为熟悉的，也是使用最多的距离。但明氏距离也具有明显的缺陷，主要表现在：一，它与各指标的量纲有关；而，它没有考虑指标之间的相关性。欧式距离也不例外。
+
+### （2）马氏距离
+
+　　设$\Sigma$表示指标的协差阵，即
+
+$\Sigma=（\sigma_{ij}）_{p \times p}$
+
+其中，
+
+$\sigma_{ij}=\frac{1}{n-1}\sum_{a=1}^{n}(x_{ai}-\overline{x_i})(x_{aj}-\overline{x_j}) \qquad i,j=1,…,p$
+
+<br>$\overline{x_i}=\frac{1}{n}\sum_{a=1}^{n}x_{ai},\overline{x_j}=\frac{1}{n}\sum_{a=1}^{n}x_{aj}$
+
+如果$\Sigma^{-1}$存在，则两个样品之间的马氏距离为：
+
+$d^2_{ij}(M)=(x_i-x_j)'\Sigma^{-1}(x_i-x_j)$
+
+　　这里的$x_i$为样本$x_i$的p个指标组成的向量，即原始资料阵的第i行向量。样本$x_j$类似。
+马氏距离即排除了各指标之间按相关性的干扰，而且不受各指标量纲的影响。除此之外，它还有将原始数据作一线性变换后，马氏距离不不变的优点。
+
+### （3）其他距离
+
+　　由于本次报告篇幅的限制，仅对兰氏距离和类间距离做大致介绍。兰氏距离仅适用于一切$x_{ij}>0$的情况。这个距离有助于克服个指标之间量纲的影响，但没有考虑指标之间的相关性。类间距离是用来度量一个类（一组样本）与另一个类（另一组样本）之间距离的统计量。此距离的定义方法很多，且都是以距离系数（如欧式距离）为依据的。
+
+
+
+
+
+## 3.2 实证分析
+### 数据来源  
+数据选取的是2019年GDP前10的国家于3月3日至5月25日每日新增病例的数据.数据来源于美国约翰斯·霍普金斯大学发布的疫情数据。
+### 数据处理
+1、原始数据中存在许多异常值，例如负值或者0值，又或者突然出现极大值，首先查阅相关疫情报道对这些数据进行修正。  
+2、由于各个国家病例数相差较大，所以这里对每个国家/地区的新病例的进行归一化（（3）式），范围从0到1。
+$$
+f(x)=\frac {x-min(x)}{max(x)-min(x)} \tag{3}
+$$
+### 方法选择  
+采用聚类分析中的系统聚类法对这10个国家的疫情数据进行聚类，得到的分析结果如下：
+```{r}
+setwd("C:/Users/15735/git/project-wonder-woman/final repo")
+library(readxl)
+x <- read.csv('data/GDP原始数据2.csv')
+msa.X<-function(df){ 
+  X=df[,-1]; 
+  rownames(X)=df[,1]; 
+  X 
+}
+a=msa.X(x)
+D=dist(a);
+plot(hclust(D,'ward.D2'))#ward.D2是一种改进的比较优良的方
+H=hclust(D,'ward.D2')
+plot(H);rect.hclust(H,5)
+cutree(H,5)
+```
+　　由上面的聚类分析结果可知，我们把10个国家分为了5类，第一类是加拿大和日本，第二类是中国；第三类是意大利，德国和法国这3个国家；第四类划分的国家有：巴西和印度；最后一类国家分别是：美国和英国。每一类国家在疫情发展的大致趋势上具有相同的走向。  
+　　接下来是对每一类国家疫情发展的趋势做进一步的分析：用处理过的数据拟合其发展曲线。 
+　　首先，是加拿大和日本这两个国家,这两个国家是疫情防控措施做的较好的国家，日本自疫情在国内发展的初期就采取了严格的防控措施，使得国内疫情人数最多未超过千人；加拿大同样也在抗疫期间逐步升级其防控力度，严格把关进口，虽比邻美国，但国内疫情发展依然得到了控制。  
+　　第二类是中国，从3月份以来国内疫情基本得到了控制，所以从图中可以看出近3个月来每日新增确诊人数最多是出现在3月份初期，到最后是逐步下降的趋势，过程中出现一次波动，可能对应于国内出现无症状患者的情况，但这一情况很快也得到了控制。现在，国内的每日新增病例基本维持在2位数以内。  
+　　第三类国家有意大利，德国，法国这3个国家，这些国家都是欧洲国家，其中，以意大利为代表，从3月份以来，疫情迅速爆发，呈现出指数增长的趋势，在当时，成为全球疫情的一个重灾区，后来逐步采取封城等措施进行防控，现在，这些国家的疫情同样基本得到了控制，意大利，德国，法国等国家都开始逐步解封，恢复部分正常的生活节奏。  
+　　第四类国家巴西和印度，这两个国家的疫情情况仍然处于一种迅速爆发的状态，近期，巴西每日新增确诊人数近2万人，成为除美国之外全球第二个疫情重灾区；印度的疫情也同样严重，这可能和印度人口众多，但相关软件设施较差有关；从图上也可以看出这两个国家每日确诊人数正在快速增加。  
+　　第五类国家是美国和英国,美国一直是全球疫情最为严重的国家，近期仍然未得到很好的控制，确诊人数达到近170万人，其原因一部分源于政府在疫情爆发初期的不作为，防控措施不到位；另一方面也源自于美国公民的不在意导致疫情蔓延到如此严重的局面。英国感染人数25万左右，死亡人数超过3.6万人，成为了欧洲死亡人数最多的国家，并且英国的疫情似乎没有减弱的趋势。主要原因还要归于政府的防疫策略上，英国放弃了追踪接触者的战略，而是将检测重点放在新冠肺炎重症患者身上。导致错失尽早切断疫情传播途径的良机。最终，英国和美国还需要一段时间才能宣告抗疫的胜利。
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+library(ggplot2)
+library(reshape2)
+library(forcats)
+library(ggpubr)
+setwd("C:/Users/15735/git/project-wonder-woman/final repo/data")
+data <- read.csv("class1.csv")
+data <- melt(data,id.vars = "days", variable.name = "country", value.name = "num") 
+num <- c(runif(83), runif(83, min=0, max=1))
+data$day <- fct_inorder(data$day)
+p1 <- ggplot(data = data, mapping = aes(x = day, y = num, colour = country,group = country )) +
+  geom_line(size = 0.5) +
+  geom_point(size = 1.5) +
+  labs(title = "第一类",x = '时间') +
+  theme(axis.text.x = element_text(angle = 60, hjust = 0.5, vjust =0.5 ,size = 2))
+```
+    
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+library(ggplot2)
+library(reshape2)
+library(forcats)
+library(ggpubr)
+setwd("C:/Users/15735/git/project-wonder-woman/final repo/data")
+data <- read.csv("class2.csv")
+data <- melt(data,id.vars = "days", variable.name = "country", value.name = "num") 
+num <- c(runif(83), runif(83, min=0, max=1))
+data$day <- fct_inorder(data$day)
+p2 <- ggplot(data = data, mapping = aes(x = day, y = num, colour = country,group = country )) +
+  geom_line(size = 0.5) +
+  geom_point(size = 1.5) +
+  labs(title = "第二类",x = '时间') +
+  theme(axis.text.x = element_text(angle = 60, hjust = 0.5, vjust =0.5 ,size = 1))
+```
+    
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+library(ggplot2)
+library(reshape2)
+library(forcats)
+library(ggpubr)
+setwd("C:/Users/15735/git/project-wonder-woman/final repo/data")
+data <- read.csv("class3.csv")
+data <- melt(data,id.vars = "days", variable.name = "country", value.name = "num") 
+num <- c(runif(83), runif(83, min=0, max=1))
+data$day <- fct_inorder(data$day)
+p3 <- ggplot(data = data, mapping = aes(x = day, y = num, colour = country,group = country )) +
+  geom_line(size = 0.5) +
+  geom_point(size = 1.5) +
+  labs(title = "第三类",x = '时间') +
+  theme(axis.text.x = element_text(angle = 60, hjust = 0.5, vjust =0.5 ,size = 3))
+```
+    
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+library(ggplot2)
+library(reshape2)
+library(forcats)
+library(ggpubr)
+setwd("C:/Users/15735/git/project-wonder-woman/final repo/data")
+data <- read.csv("class4.csv")
+data <- melt(data,id.vars = "days", variable.name = "country", value.name = "num") 
+num <- c(runif(67), runif(67, min=0, max=1))
+data$day <- fct_inorder(data$day)
+p4 <- ggplot(data = data, mapping = aes(x = day, y = num, colour = country,group = country )) +
+  geom_line(size = 0.5) +
+  geom_point(size = 1.5) +
+  labs(title = "第四类",x = '时间') +
+  theme(axis.text.x = element_text(angle = 60, hjust = 0.5, vjust =0.5 ,size = 2))
+```
+    
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+library(ggplot2)
+library(reshape2)
+library(forcats)
+library(ggpubr)
+setwd("C:/Users/15735/git/project-wonder-woman/final repo/data")
+data <- read.csv("class5.csv")
+data <- melt(data,id.vars = "days", variable.name = "country", value.name = "num") 
+num <- c(runif(83), runif(83, min=0, max=1))
+data$day <- fct_inorder(data$day)
+p5 <- ggplot(data = data, mapping = aes(x = day, y = num, colour = country,group = country )) +
+  geom_line(size = 0.5) +
+  geom_point(size = 1.5) +
+  labs(title = "第五类",x = '时间') +
+  theme(axis.text.x = element_text(angle = 60, hjust = 0.5, vjust =0.5 ,size = 2))
+```
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+ggarrange(p1,p2,p3,p4,p5,ncol=2,nrow=3,labels=c(" ","  "," "," "," "))
+```
+
+# 4 趋势拟合及预测
+　　本章节通过拟合患者比例和增长率的变化来分析疫情趋势，将复杂的外界影响因素视为患者数量增长的环境压力，以拟合生态增长曲线的方式解读2019-nCoV病毒的感染患者例数变化，分析国内外COVID-19疫情现状并预估发展趋势。
+
+    
+## 4.1 COVID-19预测预报非线性模型及其机理简介
+
+　　在时间序列里，有些变量的增长量最初比较小，随时间的增加逐渐增长而达到一个快速增长时期，而后增长速度趋缓，最终达到稳定的总增长量，这一过程若用曲线来表示，则是一种拉长的S形曲线。这种S形曲线因变量的增长特性的不同而呈现出多样性变化。通常传染病的累计病例遵循S形曲线增长。Logistic函数是一种常见的S形函数，它是皮埃尔·弗朗索瓦·韦吕勒在1844或1845年在研究它与人口增长的关系时命名的。该模型广泛应用于生物繁殖和生长过程、人口增长过程模拟。在分析COVID-19疫情变化时，可以将患者看作在限定环境中数量增长的物种，实际中病毒的传播也存在人为管控或自然阻力，因此2019-nCoV病毒的感染者例数不会无限制的增长，在一定空间范围内应符合Logistic增长曲线。
+
+  
+Logistic方程,即常微分方程如下：$$\frac {dP} {dt} =rP*(1-\frac {P} {K}) \tag{3}$$ 将上述方程求解，可以得到Logistic函数：$$P(t)=\frac {KP_0 e^rt} {K+P_0(e^rt-1)} \tag{4}$$    
+其中$P_0$为初始值，$r$为衡量曲线变化快慢，$t$为时间。$\frac{dP}{dt}$为种群增长率（单位时间个体数量的改变），$P$为种群的大小（个体的数量），$K$为可能出现的最大种群数（上渐近线）或承载力。
+
+
+## 4.2 数据说明与方法
+
+### 4.2.1 数据说明
+
+　　本章节选用2019年GDP前十的国家：美国、中国、日本、德国、印度、法国、英国、巴西、意大利和加拿大。对GDP-TOP10的国家自2019年12月31日至2020年5月24日COVID-19累计确诊病例进行拟合和预测，以及对GDP-TOP10的国家最终流行规模的预测值进行比较。同时，计算GDP-TOP10的国家自2019年12月31日至2020年5月24日每日确诊增长率数值辅助开展分析，预估GDP-TOP10的国家发展趋势。
+
+
+### 4.2.2 方法说明
+**(1) 曲线拟合方法**
+
+　　曲线拟合（curve fitting）是指选择适当的曲线类型来拟合观测数据，并用拟合的曲线方程分析变量之间的关系。本章节将每日累计确诊病例数据制成散点图，采用单个变化量对时间的响应进行非线性回归拟合，取得拟合方程的系数，并绘制回归曲线。
+ 
+　　结合$S$值、$R^2$值对拟合程度进行判断，其中$S$值描述了数据值与拟合值的距离，表示评估模型描述响应值的程度，其值越低，模型描述响应的程度越高；$R^2$值是度量拟合优度的统计量，介于$0-1$之间，也称拟合的确定系数，$R^2$越高可表示拟合优度越高。$S$值和$R^2$值表达式如下所示：
+$$S = \sum_{i=1}^{n}(y_i-\hat{y_i})^2 \tag{5}$$
+$$R^2=1-\frac {SSE*(n-k)}{(var(y))*(n-1)} \tag{6}$$
+
+
+**(2) Logistic 增长曲线**
+
+　　本章节所采用的R包为**nlrwrb**包中的**nls()**函数，相关使用可参考《Nonlinear Regression with R》。函数**nls()**自带一组自启动函数，即"self-starter functions"，其可以自动设置初始值，Logistic的自启动函数为$SSlogis(x,Asym,xmid,scal)$，其表达式为：
+
+$$\frac{Asym}{(1 + exp(\frac{xmid−x}{scal}))}\tag{7}$$与Logistic函数表达式略有不同，此处参数$Asym$代表渐近线的数字参数，其值可被作为最终流行规模的预测值，及Logistic函数表达式中的$K$值，参数$xmid$表示曲线拐点处的值，参数$scal$表示x轴上的数字比例参数。
+
+
+**(3) 每日确诊增长率数值**
+
+　　本章节所采用的每日确诊增长率数值的表达式为：$$r(t):=log(\frac{P(t)}{P(t-1)})\tag{8}$$
+参考《neralized logistic growth modeling of the COVID-19 outbreak in 29 provinces in China and in the rest of the world》
+
+
+## 4.3 结果与分析
+
+```{r,echo=FALSE,error=TRUE,warning=FALSE,message=TRUE}
+library(tidyverse)
+library('nlrwr')
+library(ggplot2)
+library(ggpubr)
+```
+
+### 4.3.1累计确诊病例回归结果分析
+
+```{r,include=FALSE,error=TRUE,warning=FALSE,message=TRUE}
+#读取数据
+library(tidyverse)
+GDP_10 <- read_csv('data/GDP_TOP10_dataF.csv')
+
+days <- GDP_10[,1]
+days <- unlist(days)
+US <- GDP_10[,2]
+US <- unlist(US)
+CN <- GDP_10[,3]
+CN <- unlist(CN)
+JP <- GDP_10[,4]
+JP <- unlist(JP)
+GE <- GDP_10[,5]
+GE <- unlist(GE)
+IN <- GDP_10[,6]
+IN <- unlist(IN)
+FR <- GDP_10[,7]
+FR <- unlist(FR)
+UK <- GDP_10[,8]
+UK <- unlist(UK)
+BR <- GDP_10[,9]
+BR <- unlist(BR)
+IT <- GDP_10[,10]
+IT <- unlist(IT)
+CA <- GDP_10[,11]
+CA <- unlist(CA)
+
+#构造数据框
+df1 <- as.data.frame(cbind(days,US))
+df2 <- as.data.frame(cbind(days,CN))
+df3 <- as.data.frame(cbind(days,JP))
+df4 <- as.data.frame(cbind(days,GE))
+df5 <- as.data.frame(cbind(days,IN))
+df6 <- as.data.frame(cbind(days,FR))
+df7 <- as.data.frame(cbind(days,UK))
+df8 <- as.data.frame(cbind(days,BR))
+df9 <- as.data.frame(cbind(days,IT))
+df10 <- as.data.frame(cbind(days,CA))
+
+#删去缺失值
+df1 <- na.omit(df1)
+df2 <- na.omit(df2)
+df3 <- na.omit(df3)
+df4 <- na.omit(df4)
+df5 <- na.omit(df5)
+df6 <- na.omit(df6)
+df7 <- na.omit(df7)
+df8 <- na.omit(df8)
+df9 <- na.omit(df9)
+df10 <- na.omit(df10)
+
+#模型
+fm1 <- nls(US ~ SSlogis(days, Asym1, xmid1, scal1), data = df1)
+summary(fm1)
+coef(fm1)
+confint(fm1)
+y_hat1 <- as.vector (predict(fm1,newdata = df1))
+R1 <- 1- ((36160^2)*122) / (var(df1$US)*124)
+S1 <- sum((df1$US-y_hat1)^2)
+
+fm2 <- nls(CN ~ SSlogis(days, Asym2, xmid2, scal2), data = df2)
+summary(fm2)
+coef(fm2)
+confint(fm2)
+y_hat2 <- as.vector (predict(fm2,newdata = df2))
+R2 <- 1- ((1524^2)*143) / (var(df2$CN)*145)
+S2 <- sum((df2$CN-y_hat2)^2)
+
+fm3 <- nls(JP ~ SSlogis(days, Asym3, xmid3, scal3), data = df3)
+summary(fm3)
+coef(fm3)
+confint(fm3)
+y_hat3 <- as.vector(predict(fm3,newdata = df3))
+R3 <- 1- ((225.1^2)*128) / (var(df3$JP)*130)
+S3 <- sum((df3$JP-y_hat3)^2)
+
+fm4 <- nls(GE ~ SSlogis(days, Asym4, xmid4, scal4), data = df4)
+summary(fm4)
+coef(fm4)
+confint(fm4)
+y_hat4 <- as.vector(predict(fm4,newdata = df4))
+R4 <- 1- ((4089^2)*115) / (var(df4$GE)*117)
+S4 <- sum((df4$GE-y_hat4)^2)
+
+fm5 <- nls(IN ~ SSlogis(days, Asym5, xmid5, scal5), data = df5)
+summary(fm5)
+coef(fm5)
+confint(fm5)
+y_hat5 <- as.vector(predict(fm5,newdata = df5))
+R5 <- 1- ((1094^2)*113) / (var(df5$IN)*115)
+S5 <- sum((df5$IN-y_hat5)^2)
+
+fm6 <- nls(FR ~ SSlogis(days, Asym6, xmid6, scal6), data = df6)
+summary(fm6)
+coef(fm6)
+confint(fm6)
+y_hat6 <- as.vector(predict(fm6,newdata = df6))
+R6 <- 1- ((2824^2)*118) / (var(df6$FR)*120)
+S6 <- sum((df6$FR-y_hat6)^2)
+
+fm7 <- nls(UK ~ SSlogis(days, Asym7, xmid7, scal7), data = df7)
+summary(fm7)
+coef(fm7)
+confint(fm7)
+y_hat7 <- as.vector(predict(fm7,newdata = df7))
+R7 <- 1- ((4782^2)*111) / (var(df7$UK)*113)
+S7 <- sum((df7$UK-y_hat7)^2)
+
+fm8 <- nls(BR ~ SSlogis(days, Asym8, xmid8, scal8), data = df8)
+summary(fm8)
+coef(fm8)
+confint(fm8)
+y_hat8 <- as.vector(predict(fm8,newdata = df8))
+R8 <- 1- ((2619^2)*86) / (var(df8$BR)*88) 
+S8 <- sum((df8$BR-y_hat8)^2)
+
+fm9 <- nls(IT ~ SSlogis(days, Asym9, xmid9, scal9), data = df9)
+summary(fm9)
+coef(fm9)
+confint(fm9)
+y_hat9 <- as.vector(predict(fm9,newdata = df9))
+R9 <- 1- ((5602^2)*112) / (var(df9$IT)*114)
+S9 <- sum((df9$IT-y_hat9)^2)
+
+fm10 <- nls(CA ~ SSlogis(days, Asym10, xmid10, scal10), data = df10)
+summary(fm10)
+coef(fm10)
+confint(fm10)
+y_hat10 <- as.vector(predict(fm10,newdata = df10))
+R10 <- 1- ((1380^2)*117) / (var(df10$CA)*119)
+S10 <- sum((df10$CA-y_hat10)^2)
+```
+
+```{r,echo=FALSE,error=TRUE,warning=FALSE,message=FALSE}
+country = c("United States","China","Japan","Germany","India","France","United Kingdom","Brazil","Italy","Canada")
+R = c(R1,R2,R3,R4,R5,R6,R7,R8,R9,R10)
+S = c(S1,S2,S3,S4,S5,S6,S7,S8,S9,S10)
+Asym = c(coef(fm1)[1],coef(fm2)[1],coef(fm3)[1],coef(fm4)[1],coef(fm5)[1],coef(fm6)[1],coef(fm7)[1],coef(fm8)[1],coef(fm9)[1],coef(fm10)[1])
+lower_Asym = c(confint(fm1)[1,1],confint(fm2)[1,1],confint(fm3)[1,1],confint(fm4)[1,1],confint(fm5)[1,1],confint(fm6)[1,1],confint(fm7)[1,1],confint(fm8)[1,1],confint(fm9)[1,1],confint(fm10)[1,1])
+upper_Asym = c(confint(fm1)[1,2],confint(fm2)[1,2],confint(fm3)[1,2],confint(fm4)[1,2],confint(fm5)[1,2],confint(fm6)[1,2],confint(fm7)[1,2],confint(fm8)[1,2],confint(fm9)[1,2],confint(fm10)[1,2])
+xmid = c(coef(fm1)[2],coef(fm2)[2],coef(fm3)[2],coef(fm4)[2],coef(fm5)[2],coef(fm6)[2],coef(fm7)[2],coef(fm8)[2],coef(fm9)[2],coef(fm10)[2])
+scal = c(coef(fm1)[3],coef(fm2)[3],coef(fm3)[3],coef(fm4)[3],coef(fm5)[3],coef(fm6)[3],coef(fm7)[3],coef(fm8)[3],coef(fm9)[3],coef(fm10)[3])
+day = c(125,146,131,118,116,121,114,89,115,120)
+tb <- tibble(
+  country=country,
+  Day = day,
+  Asym = Asym,
+  lower_Asym = lower_Asym,
+  upper_Asym = upper_Asym,
+  xmid = xmid,
+  scal = scal,
+  R_2 = R,
+  S = S
+)
+tb
+```
+
+　　从上表中可以看到获得的Logistic增长曲线的参数估计，以及$S$值和$R^2$值。根据$R^2$值一列，可以看到利用Logistics增长曲线对GDP-TOP10的国家自2019年12月31日至2020年5月24日累计确诊病例数据进行拟合效果显著，且在进行回归分析时，GDP-TOP10的国家Logistic增长曲线的估计参数均通过显著性检验。参数Asym代表渐近线的数字参数，通常被用来作为最终流行规模预测值，从表中可以看到疫情由高到低的顺序为：美国、巴西、印度、英国、意大利、德国、法国、加拿大、中国、日本。而我国作为第一人口大国，累计确诊病例远低于其他国家，可见我国政府的管控措施显著。参数xmid表示x曲线拐点处的值,将参数xmid值与Day值比较，可见印度和巴西还未达到拐点值，且印度即将迎来拐点，其他国家均达到拐点。
+
+### 4.3.2累计确诊病例回归拟合分析
+```{r,fig.align='center',  fig.cap="图 累计确诊病例回归拟合", out.width="100%",out.height="100%",echo=FALSE}
+#曲线拟合
+p1 <- ggplot(df1,aes(days,predict(fm1)))+geom_line()+geom_point(aes(y=US))+geom_hline(yintercept = coef(fm1)[1],lty=2)+theme_bw()+theme(panel.grid.minor = element_blank(),panel.grid.major = element_blank())+xlab("days")+ylab("")
+
+p2 <- ggplot(df2,aes(days,predict(fm2)))+geom_line()+geom_point(aes(y=CN))+geom_hline(yintercept = coef(fm2)[1],lty=2)+theme_bw()+theme(panel.grid.minor = element_blank(),panel.grid.major = element_blank())+xlab("days")+ylab("")
+
+p3 <- ggplot(df3,aes(days,predict(fm3)))+geom_line()+geom_point(aes(y=JP))+geom_hline(yintercept = coef(fm3)[1],lty=2)+theme_bw()+theme(panel.grid.minor = element_blank(),panel.grid.major = element_blank())+xlab("days")+ylab("")
+
+p4 <- ggplot(df4,aes(days,predict(fm4)))+geom_line()+geom_hline(yintercept = coef(fm4)[1],lty=2)+geom_point(aes(y=GE))+theme_bw()+theme(panel.grid.minor=element_blank(),panel.grid.major = element_blank())+xlab("days")+ylab("")
+
+p5 <- ggplot(df5,aes(days,predict(fm5)))+geom_line()+geom_hline(yintercept = coef(fm5)[1],lty=2)+geom_point(aes(y=IN))+theme_bw()+theme(panel.grid.minor = element_blank(),panel.grid.major = element_blank())+xlab("days")+ylab("")
+
+p6 <- ggplot(df6,aes(days,predict(fm6)))+geom_line()+geom_hline(yintercept = coef(fm6)[1],lty=2)+geom_point(aes(y=FR))+theme_bw()+
+  theme(panel.grid.minor = element_blank(),panel.grid.major = element_blank())+xlab("days")+ylab("")
+
+p7 <- ggplot(df7,aes(days,predict(fm7)))+geom_line()+geom_hline(yintercept = coef(fm7)[1],lty=2)+geom_point(aes(y=UK))+theme_bw()+
+  theme(panel.grid.minor = element_blank(),panel.grid.major = element_blank())+xlab("days")+ylab("")
+
+p8 <- ggplot(df8,aes(days,predict(fm8)))+geom_line()+geom_hline(yintercept = coef(fm8)[1],lty=2)+geom_point(aes(y=BR))+theme_bw()+
+  theme(panel.grid.minor = element_blank(),panel.grid.major = element_blank())+xlab("days")+ylab("")
+
+p9 <- ggplot(df9,aes(days,predict(fm9)))+geom_line()+geom_hline(yintercept = coef(fm9)[1],lty=2)+geom_point(aes(y=IT))+theme_bw()+
+  theme(panel.grid.minor = element_blank(),panel.grid.major = element_blank())+xlab("days")+ylab("")
+
+p10 <- ggplot(df10,aes(days,predict(fm10)))+geom_line()+geom_hline(yintercept = coef(fm10)[1],lty=2)+geom_point(aes(y=CA))+theme_bw()+
+  theme(panel.grid.minor = element_blank(),panel.grid.major = element_blank())+xlab("days")+ylab("")
+
+ggarrange(p1,p2,p3,p4,p5,p6,p7,p8,p9,p10,ncol=2,nrow=5,labels=c("US","CN","JP","GE","IN","FR","UK","BR","IT","CA"))
+```
+
+　　上述图是利用获得Logistics增长曲线对GDP-TOP10的国家累计确诊病例数据的拟合，从图中可以看到拟合效果良好。中国、日本、德国、法国和意大利这五个国家，疫情基本稳定，总增长量基本平稳，长时间停留在渐近线附近。美国、英国和加拿大这三个国家，刚刚抵达渐进线处，疫情情况还不明朗，政府应加强控制。印度和巴西这两个国家，离渐近线较远，疫情还未达到拐点，累计确诊病例可能会继续上升。
+
+### 4.3.3每日确诊增长率趋势分析
+```{r,fig.align='center',  fig.cap="图 每日确诊增长率趋势", out.width="100%",out.width="100%",out.height="100%",echo=FALSE}
+#读取数据
+US_r <- GDP_10[,12]
+US_r <- unlist(US_r)
+CN_r <- GDP_10[,13]
+CN_r <- unlist(CN_r)
+JP_r <- GDP_10[,14]
+JP_r <- unlist(JP_r)
+GE_r <- GDP_10[,15]
+GE_r <- unlist(GE_r)
+IN_r <- GDP_10[,16]
+IN_r <- unlist(IN_r)
+FR_r <- GDP_10[,17]
+FR_r <- unlist(FR_r)
+UK_r <- GDP_10[,18]
+UK_r <- unlist(UK_r)
+BR_r <- GDP_10[,19]
+BR_r <- unlist(BR_r)
+IT_r <- GDP_10[,20]
+IT_r <- unlist(IT_r)
+CA_r <- GDP_10[,21]
+CA_r <- unlist(CA_r)
+
+#构造数据框
+df1_r <- as.data.frame(cbind(days,US_r))
+df2_r<- as.data.frame(cbind(days,CN_r))
+df3_r <- as.data.frame(cbind(days,JP_r))
+df4_r <- as.data.frame(cbind(days,GE_r))
+df5_r <- as.data.frame(cbind(days,IN_r))
+df6_r <- as.data.frame(cbind(days,FR_r))
+df7_r <- as.data.frame(cbind(days,UK_r))
+df8_r <- as.data.frame(cbind(days,BR_r))
+df9_r <- as.data.frame(cbind(days,IT_r))
+df10_r <- as.data.frame(cbind(days,CA_r))
+
+#删去缺失值
+df1_r <- na.omit(df1_r)
+df2_r <- na.omit(df2_r)
+df3_r <- na.omit(df3_r)
+df4_r <- na.omit(df4_r)
+df5_r <- na.omit(df5_r)
+df6_r <- na.omit(df6_r)
+df7_r <- na.omit(df7_r)
+df8_r <- na.omit(df8_r)
+df9_r <- na.omit(df9_r)
+df10_r <- na.omit(df10_r)
+
+#画图
+p1_r <- ggplot(df1_r,aes(days,US_r))+geom_line()+theme_bw()+
+  theme(panel.grid.minor = element_blank(),panel.grid.major = element_blank())+xlab("days")+ylab("")
+
+p2_r <- ggplot(df2_r,aes(days,CN_r))+geom_line()+theme_bw()+
+  theme(panel.grid.minor = element_blank(),panel.grid.major = element_blank())+xlab("days")+ylab("")
+
+p3_r <- ggplot(df3_r,aes(days,JP_r))+geom_line()+theme_bw()+
+  theme(panel.grid.minor = element_blank(),panel.grid.major = element_blank())+xlab("days")+ylab("")
+
+p4_r <- ggplot(df4_r,aes(days,GE_r))+geom_line()+theme_bw()+
+  theme(panel.grid.minor = element_blank(),panel.grid.major = element_blank())+xlab("days")+ylab("")
+
+p5_r <- ggplot(df5_r,aes(days,IN_r))+geom_line()+theme_bw()+
+  theme(panel.grid.minor = element_blank(),panel.grid.major = element_blank())+xlab("days")+ylab("")
+
+p6_r <- ggplot(df6_r,aes(days,FR_r))+geom_line()+theme_bw()+
+  theme(panel.grid.minor = element_blank(),panel.grid.major = element_blank())+xlab("days")+ylab("")
+
+p7_r <- ggplot(df7_r,aes(days,UK_r))+geom_line()+theme_bw()+
+  theme(panel.grid.minor = element_blank(),panel.grid.major = element_blank())+xlab("days")+ylab("")
+
+p8_r <- ggplot(df8_r,aes(days,BR_r))+geom_line()+theme_bw()+
+  theme(panel.grid.minor = element_blank(),panel.grid.major = element_blank())+xlab("days")+ylab("")
+
+p9_r <- ggplot(df9_r,aes(days,IT_r))+geom_line()+theme_bw()+
+  theme(panel.grid.minor = element_blank(),panel.grid.major = element_blank())+xlab("days")+ylab("")
+
+p10_r <- ggplot(df10_r,aes(days,CA_r))+geom_line()+theme_bw()+
+  theme(panel.grid.minor = element_blank(),panel.grid.major = element_blank())+xlab("days")+ylab("")
+
+ggarrange(p1_r,p2_r,p3_r,p4_r,p5_r,p6_r,p7_r,p8_r,p9_r,p10_r,ncol=2,nrow=5,labels=c("US","CN","JP","GE","IN","FR","UK","BR","IT","CA"))
+
+```
+
+　　上述图是每日确诊增长率折线图，从图中可以看到中国每日确诊增长率已长时间趋于0。其次，日本每日确诊增长率也开始趋于0，为0.0008。印度和巴西这两个国家每日确诊增长率最大，分别为0.052和0.048，累计确诊病例仍会继续大幅增加。美国、英国、加拿大这三个国家每日确诊增长率为第二大，均在0.013附近。德国、法国、意大利这三个国家每日确诊增长率接近，在0.002附近。
+
+
+　　综上诉述，中国疫情已经得到控制，疫情防范效果最为突出，是十个国家最先也是最短时间将疫情控制住的国家，也体现我们国家领导人坚持“不计成本，生命至上，人民至上”的原则。日本疫情也基本得到控制，是十个国家第二位将疫情控制住的国家。德国、法国、意大利这三个国家疫情形势相似，疫情也基本得到控制。印度和巴西这两个国家疫情形势较为相似，是十个国家中疫情还仍未达到拐点的两个国家，这两个国家累计确诊病例仍会继续大幅增加，政府应加强管理措施。美国、英国、加拿大这三个国家疫情形势接近，疫情态势还不太明朗。
+
+
+
+# 5 总结与建议
+
+## 5.1 总结
+
+**（1）“纵观世界风云，这边风景独好”**
+
+<<<<<<< HEAD
+　　通过对COVID-19每日新增数据的可视化，可以直观地对各国疫情发展有全局的把握。中国、韩国等虽然属于最早出现疫情的一批国家，但是由于国家政府采取强有力的疫情控制政策和大多数民众的配合，尤其是中国，使得本国疫情得到很好的控制。从全球归一化的每日新增病例动态图可以看出，中韩两国在三月左右先后出现拐点（即单日新增最高值），说明两国疫情从爆发到得到基本控制仅花费一个月左右的时间。
+=======
+通过对COVID-19每日新增数据的可视化，可以直观地对各国疫情发展有全局的把握。中国、韩国等虽然属于最早出现疫情的一批国家，但是由于国家政府采取强有力的疫情控制政策和大多数民众的配合，尤其是中国，使得本国疫情得到很好的控制。从全球归一化的每日新增病例动态图可以看出，中韩两国在三月左右先后出现拐点，说明两国疫情从爆发到得到基本控制仅花费一个月左右的时间。
+>>>>>>> 92424ed44b427f4c09db351fcebfd29e641eef41
+
+　　从GDP前10的国家的疫情累计确诊对比分析可以看出，在同样的时间跨度，中国抗疫进入成果保卫战阶段，剩余的8个国家累计确诊还处在不同程度的增长阶段。日本在疫情大规模爆发后，开始学习中国科学抗疫，在近几日增长较为平缓,按目前趋势线所示疫情也得到基本控制。进一步的，通过对Logistic增长曲线的估计参数Asym排序，得出结论也与描述统计部分一致，中国和日本的最终流行规模预测值分别为4.66和7.93，而且利用获得Logistics增长曲线对GDP-TOP10的国家累计确诊病例数据的拟合可以看出中国和日本疫情基本稳定，总增长量基本平稳，长时间停留在渐近线附近。并且从每日确诊增长率折线图可以看到中国每日确诊增长率已长时间趋于0；日本每日确诊增长率也开始趋于0，为0.0008。
+
+**（2）“革命尚未成功，同志仍需努力”**
+
+<<<<<<< HEAD
+　　虽然通过Logistics增长曲线对德国、法国和意大利这三个国家累计确诊病例数据的拟合，拟合结果与中日相似，总增长量基本平稳，长时间停留在渐近线附近。聚类分析的结果也于此想照应，虽然聚类结果将德中法意四国归为一打雷，但结合前两者的分析，与中国的情况并不相同，这三个国家每日确诊增长率在0.002附近，并且从TOP10的死亡率折线图可以看出，法国死亡率目前已经超过的19%,目前还在快速增长；意大利的死亡率近来在14%波动；德国得益于健全医疗体系等国情死亡率至今还未超过5%，但是整体来看还是需要还处于疫情防控的攻坚阶段，谨防后续时间疫情突然出现反跳的情况。
+=======
+虽然通过Logistics增长曲线对德国、法国和意大利这三个国家累计确诊病例数据的拟合，拟合结果与中日相似，总增长量基本平稳，长时间停留在渐近线附近，聚类分析的结果也基本一致。不过，虽然聚类结果将德中法意四国归为一类，但结合前两者的分析，与中国的情况并不相同，这三个国家每日确诊增长率在0.002附近，并且从TOP10的死亡率折线图可以看出，法国死亡率目前已经超过的19%,目前还在快速增长；意大利的死亡率近来在14%波动；德国得益于健全医疗体系等国情死亡率至今还未超过5%，但是整体来看还是需要还处于疫情防控的攻坚阶段，谨防后续时间疫情突然出现反跳的情况。
+>>>>>>> 92424ed44b427f4c09db351fcebfd29e641eef41
+
+**（3）”黎明之前最黑暗"**
+
+　　通过前文的分析，虽然美国、英国、加拿大、印度和巴西这五个国家目前疫情均不乐观，但根据聚类分析的结果并结合国家政府对待疫情态度的不同，抗疫政策的差异以及综合国力的差距，各国疫情如此严重的成因各不相同。
+
+<<<<<<< HEAD
+　　根据Logistics增长曲线拟合的分析，美国、英国和加拿大这三个国家，刚刚抵达渐进线处，且通过对GDP前10最终流行规模预测值的排序，美国第一位，英国第四位，加拿大第七位。，截至5月28日美国累计确诊人数已经超过了115万人，虽然美国目前GDP排名第一，国家综合实力也处于领先地位，但是由于国家领导人对疫情的不重视和不当的抗疫政策，导致美国成为此次疫情中，累计确诊人数和累计死亡人数前三的国家。3月5日，英国出现首例死亡病例，距今已有74天，累计确诊至今仍在缓慢增长，拐点仍未出现，并且英国的死亡率超过10%，在目前虽有所回落，但仍在14%波动。加拿大地广人稀，在一定程度上对疫情的传播起到了阻碍作用，所以虽然加拿大目前疫情情况虽然还不明朗，但疫情严重程度较英美两国轻。
+
+　　截至5月28日，巴西、印度的疫情还在进一步恶化,累计确诊病例增速加快，并且通过拟合，印巴两国的拟合曲线离渐近线较远，疫情还未达到拐点，累计确诊病例可能会继续上升。印度由于人口众多，医疗卫生水平落后，贫富差距悬殊，还有之前蝗灾的影响，截至5月28日，累计确诊已逾15万人。巴西总统在疫情期间仍然鼓励民众继续上街，一方面由于巴西医疗水平较差，医疗设施落后，不足以支撑大规模的核酸检测，另一方面是巴西属于出口型国家，受到疫情的冲击，经济发展困难导难以支撑国家福利。
+=======
+根据Logistics增长曲线拟合的分析，美国、英国和加拿大这三个国家，刚刚抵达渐进线处，且通过对GDP前10最终流行规模预测值的排序，美国第一位，英国第四位，加拿大第七位。，截至5月28日美国累计确诊人数已经超过了115万人，虽然美国目前GDP排名第一，国家综合实力也处于领先地位，但是由于国家领导人对疫情的不重视和不当的抗疫政策，导致美国即使拥有先进的医疗技术和最好的医疗资源，却沦为新冠疫情的“重灾区”。。3月5日，英国出现首例死亡病例，距今已有74天，累计确诊至今仍在缓慢增长，拐点仍未出现，并且英国的死亡率超过10%，截至目前虽有所回落，但仍在14%波动。加拿大地广人稀，在一定程度上对疫情的传播起到了阻碍作用，但是截至5月28日，加拿大累计确诊也达88989，较上日新增899例，所以加拿大目前疫情情况还不明朗，但疫情严重程度较英美两国轻。
+
+截至5月28日，巴西、印度的疫情还在进一步恶化,累计确诊病例增速加快，并且通过拟合，印巴两国的拟合曲线离渐近线较远，疫情还未达到拐点，累计确诊病例可能会继续上升。截至目前，印度累计确诊已逾15万人。虽然相比美国、英国而言，印度的疫情并不严重，而且死亡率也没有意大利等国家高。但是在隐患上来看，印度最高。之所以这样说是因为，印度是个拥有13亿人口的人口大国，医疗卫生水平落后，贫富差距悬殊，还有之前蝗灾的影响，印度如今的日检测量以及规模都比较小，加上检测试剂等物资不足，这些都使得印度无法开展全国性的疫情排查。巴西总统在疫情期间仍然鼓励民众继续上街，一方面由于巴西医疗水平较差，医疗设施落后，不足以支撑大规模的核酸检测，另一方面是巴西属于出口型国家，受到疫情的冲击，经济发展困难导难以支撑国家福利。
+>>>>>>> 92424ed44b427f4c09db351fcebfd29e641eef41
+
+
+## 5.2 建议
+
+　　中国目前绝大部分省市已经实现稳定有序的复工复产，这对全球各国如何度过疫情时期以及实现科学有序的复工复产都具有十分重要的借鉴意义。结合分析结果，建议部分只对处在疫情不同发展阶段的国家提出是否可进行复工复产的建议，由于各国国情的不同，没有具体的复工复产建议。
+
+<<<<<<< HEAD
+　　对于像日本这样疫情已经得到基本控制的国家，可以在新增确诊实现零增长并度过一段时间的潜伏观察期，分行业有序科学实现复工复产，但仍要警惕境外输入以及做好集聚场所，如学校、看守所、养老院等防控工作，防止疫情出现再次爆发。对于像德法意此类的国家疫情开始出现缓和的国家，也不要放松警惕，继续做好疫情的防控工作，民众也要积极配合政府的抗疫政策，配合隔离措施，既可避免疫情的再次爆发也为后面复工复产的实现奠定良好的基础。而对于英美加以及印巴此类国家，尤其是美国，建议执行强有力的疫情防控政策，在疫情未得到有效控制之前，不建议实行复工复产。
+=======
+对于像日本这样疫情已经得到基本控制的国家，可以在新增确诊实现零增长并度过一段时间的潜伏观察期，分行业有序科学实现复工复产，但仍要警惕境外输入以及做好集聚场所，如学校、看守所、养老院等防控工作，防止疫情出现再次爆发。对于像德法意此类的国家疫情开始出现缓和的国家，也不要放松警惕，继续做好疫情的防控工作，民众也要积极配合政府的抗疫政策，配合隔离措施，既可避免疫情的再次爆发也为后面复工复产的实现奠定良好的基础。而对于英美加以及印巴此类疫情仍然严峻的国家，尤其是美国，建议执行强有力的疫情防控政策，在疫情未得到有效控制之前，不建议实行复工复产。
+>>>>>>> 92424ed44b427f4c09db351fcebfd29e641eef41
+
+
+
+
+# 6 致谢
+
+　　弹指间一学期即将过去，在此次课程中我们都收获颇多。首先，感谢学院为我们安排这门课程。其次，感谢闫军老师为我们带来了全新的工具，我们从一个小白一步步入门了git、github以及r Markdown等工具的使用；同时，在学习这门课的过程中，极大的锻炼了我们自主学习和解决问题的能力，这将是我们未来学习生活和职业生涯中及其宝贵的财富。最后，感谢合作伙伴的配合以及同学们的讨论和建议，希望我们在未来都能够正视自己的不足、不断的进取。
+
+
+# 参考文献
+[1] Christian Ritz,Jens Carl Streibig.Nonlinear Regression with R.SpringerLink.2008.Preprint at:https://link.springer.com/book/10.1007/978-0-387-09616-2
+
+[2] Ke Wu,Didier Darcet,Qian Wang,Didier Sornette.Generalized logistic growth modeling of the COVID-19 outbreak in 29 provinces in China and in the rest of the world.medRxiv.2020.Preprint at: https://www.medrxiv.org/content/medrxiv/early/2020/03/16/2020.03.11.20034363.full.pdf
+
+[3]杨吉安,颜忠诚.基于生态模型的新型冠状病毒肺炎疫情分析[J/OL].首都师范大学学报(自然科学版):1-12[2020-05-21]
+
+[4]易大莉,李高明,冷怀明.新型冠状病毒肺炎疫情发展区域差异的聚类分析[J/OL].重庆医科大学学报:1-6[2020-05-27]
+
+[5]武文韬,柏如海,李达宁,冯敖梓,徐安定,吕军.广东省新型冠状病毒肺炎疫情流行趋势的初步预测[J].暨南大学学报(自然科学与医学版),2020,41(02):181-185.
+
+[6]杨雨琦,孙琦,王悦欣,严雪凌,乐涛.重庆市新型冠状病毒肺炎(NCP)疫情分析与趋势预测[J].重庆师范大学学报(自然科学版),2020,37(01):135-140.
+
+>>>>>>> e09387aa326dc0c5c716670352edbc2961eb02d8
 [7]张荣强,刘辉,李凤英,李向文,刘启玲,李星慧,孙娜,张蓓,史传道.全球2019冠状病毒病（COVID-19）与甲型流感（2009-H1N1）疫情初期的流行病学对比分析及中医药防治策略研究[J/OL].陕西中医药大学学报:1-7[2020-05-29].
