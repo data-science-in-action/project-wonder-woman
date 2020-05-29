@@ -407,25 +407,24 @@ $d^2_{ij}(M)=(x_i-x_j)'\Sigma^{-1}(x_i-x_j)$
 ## 3.2 实证分析
 
 ### 数据来源  
-
-　　数据选取的是2019年GDP前20的国家于3月20日至5月25日每日新增病例的数据.
+数据选取的是2019年GDP前10的国家于3月3日至5月25日每日新增病例的数据.数据来源于美国约翰斯·霍普金斯大学发布的疫情数据。
 
 ### 数据处理
 1、原始数据中存在许多异常值，例如负值或者0值，又或者突然出现极大值，首先查阅相关疫情报道对这些数据进行修正。  
 
-2、由于各个国家病例数相差较大，所以这里对每个国家/地区的新病例的进行归一化（（1）式），范围从0到1。
+2、由于各个国家病例数相差较大，所以这里对每个国家/地区的新病例的进行归一化（（3）式），范围从0到1。
 $$
-f(x)=\frac {x-min(x)}{max(x)-min(x)} \tag{1}
+f(x)=\frac {x-min(x)}{max(x)-min(x)} \tag{3}
 $$
 
 ### 方法选择  
 
-　　采用聚类分析中的系统聚类法对这20个国家的疫情数据进行聚类，得到的分析结果如下：
+采用聚类分析中的系统聚类法对这10个国家的疫情数据进行聚类，得到的分析结果如下：
 
 ```{r}
-
+setwd("C:/Users/15735/git/project-wonder-woman/final repo")
 library(readxl)
-x <- read.csv('data/GDP_TOP20.csv')
+x <- read.csv('data/GDP原始数据2.csv')
 msa.X<-function(df){ 
   X=df[,-1]; 
   rownames(X)=df[,1]; 
@@ -439,100 +438,112 @@ plot(H);rect.hclust(H,5)
 cutree(H,5)
 ```
 
-　　由上面的聚类分析结果可知，我们把20个国家分为了5类，第一类是美国，第二类是英国，土耳其，加拿大，和日本；第三类是俄罗斯，巴西，印度，印度尼西亚，墨西哥以及沙特阿拉伯这6个国家；划分在第四类的国家有：西班牙，德国，瑞士，韩国和澳大利亚；最后一类国家分别是：意大利，法国，中国以及荷兰。每一类国家在疫情发展的大致趋势上具有相同的走向。  
-
+　　由上面的聚类分析结果可知，我们把10个国家分为了5类，第一类是加拿大和日本，第二类是中国；第三类是意大利，德国和法国这3个国家；第四类划分的国家有：巴西和印度；最后一类国家分别是：美国和英国。每一类国家在疫情发展的大致趋势上具有相同的走向。  
 　　接下来是对每一类国家疫情发展的趋势做进一步的分析：用处理过的数据拟合其发展曲线。 
-
-　　首先，是美国，单独划分为一类，从3月中旬到现阶段，美国的疫情一直未得到很好的控制，从刚开始的指数式增长，到现在仍然保持较高的日新增患病者，疫情并未得到很好的控制，成为全球确诊病例最多的国家，也是疫情最为严重的重灾区。一方面源自于美国政府防控措施不到位，另一方面也源自于美国民众的大意，在疫情初期，不重视戴口罩等防护措施。
-
+　　首先，是加拿大和日本这两个国家,这两个国家是疫情防控措施做的较好的国家，日本自疫情在国内发展的初期就采取了严格的防控措施，使得国内疫情人数最多未超过千人；加拿大同样也在抗疫期间逐步升级其防控力度，严格把关进口，虽比邻美国，但国内疫情发展依然得到了控制。  
+　　第二类是中国，从3月份以来国内疫情基本得到了控制，所以从图中可以看出近3个月来每日新增确诊人数最多是出现在3月份初期，到最后是逐步下降的趋势，过程中出现一次波动，可能对应于国内出现无症状患者的情况，但这一情况很快也得到了控制。现在，国内的每日新增病例基本维持在2位数以内。  
+　　第三类国家有意大利，德国，法国这3个国家，这些国家都是欧洲国家，其中，以意大利为代表，从3月份以来，疫情迅速爆发，呈现出指数增长的趋势，在当时，成为全球疫情的一个重灾区，后来逐步采取封城等措施进行防控，现在，这些国家的疫情同样基本得到了控制，意大利，德国，法国等国家都开始逐步解封，恢复部分正常的生活节奏。  
+　　第四类国家巴西和印度，这两个国家的疫情情况仍然处于一种迅速爆发的状态，近期，巴西每日新增确诊人数近2万人，成为除美国之外全球第二个疫情重灾区；印度的疫情也同样严重，这可能和印度人口众多，但相关软件设施较差有关；从图上也可以看出这两个国家每日确诊人数正在快速增加。  
+　　第五类国家是美国和英国,美国一直是全球疫情最为严重的国家，近期仍然未得到很好的控制，确诊人数达到近170万人，其原因一部分源于政府在疫情爆发初期的不作为，防控措施不到位；另一方面也源自于美国公民的不在意导致疫情蔓延到如此严重的局面。英国感染人数25万左右，死亡人数超过3.6万人，成为了欧洲死亡人数最多的国家，并且英国的疫情似乎没有减弱的趋势。主要原因还要归于政府的防疫策略上，英国放弃了追踪接触者的战略，而是将检测重点放在新冠肺炎重症患者身上。导致错失尽早切断疫情传播途径的良机。最终，英国和美国还需要一段时间才能宣告抗疫的胜利。
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 library(ggplot2)
 library(reshape2)
 library(forcats)
-
-data <- read.csv("data/class1.csv")
+library(ggpubr)
+setwd("C:/Users/15735/git/project-wonder-woman/final repo/data")
+data <- read.csv("class1.csv")
 data <- melt(data,id.vars = "days", variable.name = "country", value.name = "num") 
-num <- c(runif(67), runif(67, min=0, max=1))
+num <- c(runif(83), runif(83, min=0, max=1))
 data$day <- fct_inorder(data$day)
-ggplot(data = data, mapping = aes(x = day, y = num, colour = country,group = country )) +
+p1 <- ggplot(data = data, mapping = aes(x = day, y = num, colour = country,group = country )) +
   geom_line(size = 0.5) +
   geom_point(size = 1.5) +
-  labs(title = "美国",x = '时间') +
-  theme(axis.text.x = element_text(angle = 60, hjust = 0.5, vjust =0.5 ,size = 1))
+  labs(title = "第一类",x = '时间') +
+  theme(axis.text.x = element_text(angle = 60, hjust = 0.5, vjust =0.5 ,size = 2))
 ```
 
-　　第二类是英国，日本，加拿大，土耳其这四个国家，从图中可以看出，在疫情开始在这些国内爆发的时候，发展速度还是很快的，但是，近期，一点点得到了控制。其中，日本的防疫措施采取的是很到位的，国内每日新增确诊人数未超过千人，疫情已被控制住了。加拿大自3月初国内出现第一例死亡病例后也逐步升级防控措施，严控进出关口，使其疫情的发展没有到很严重的地步；土耳其采用的是“小步快走”的策略，为了不使国内经济下滑，土耳其随疫情得发展不断调整其防控措施，每天都在公布新的防控措施；到了一定阶段，疫情相对平稳以后，再观望一下，采取下一步的措施。
+    
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 library(ggplot2)
 library(reshape2)
 library(forcats)
-
-data <- read.csv("data/class2.csv")
+library(ggpubr)
+setwd("C:/Users/15735/git/project-wonder-woman/final repo/data")
+data <- read.csv("class2.csv")
 data <- melt(data,id.vars = "days", variable.name = "country", value.name = "num") 
-num <- c(runif(67), runif(67, min=0, max=1))
+num <- c(runif(83), runif(83, min=0, max=1))
 data$day <- fct_inorder(data$day)
-ggplot(data = data, mapping = aes(x = day, y = num, colour = country,group = country )) +
+p2 <- ggplot(data = data, mapping = aes(x = day, y = num, colour = country,group = country )) +
   geom_line(size = 0.5) +
   geom_point(size = 1.5) +
   labs(title = "第二类",x = '时间') +
-  theme(axis.text.x = element_text(angle = 60, hjust = 0.5, vjust =0.5 ,size = 4))
+  theme(axis.text.x = element_text(angle = 60, hjust = 0.5, vjust =0.5 ,size = 1))
 ```
 
-　　第三类国家有俄罗斯，巴西，印度等国家，这些国家近期得疫情仍然处于一种快速发展得阶段；其中，巴西每日新增确诊人数高居1万多人，俄罗斯每日新增确诊人数约1万左右，印度每日新增确诊人数仍然在逐日上升，疫情未得到很好的控制。俄罗斯在疫情开始初期对中国方面的防控措施一直做的很到位，后期，疫情在全球范围内爆发，以致对欧美国家疫情防控的不及时，导致境内疫情的现状。
+    
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 library(ggplot2)
 library(reshape2)
 library(forcats)
-
-data <- read.csv("data/class3.csv")
+library(ggpubr)
+setwd("C:/Users/15735/git/project-wonder-woman/final repo/data")
+data <- read.csv("class3.csv")
 data <- melt(data,id.vars = "days", variable.name = "country", value.name = "num") 
-num <- c(runif(67), runif(67, min=0, max=1))
+num <- c(runif(83), runif(83, min=0, max=1))
 data$day <- fct_inorder(data$day)
-ggplot(data = data, mapping = aes(x = day, y = num, colour = country,group = country )) +
+p3 <- ggplot(data = data, mapping = aes(x = day, y = num, colour = country,group = country )) +
   geom_line(size = 0.5) +
   geom_point(size = 1.5) +
   labs(title = "第三类",x = '时间') +
-  theme(axis.text.x = element_text(angle = 60, hjust = 0.5, vjust =0.5 ,size = 6))
+  theme(axis.text.x = element_text(angle = 60, hjust = 0.5, vjust =0.5 ,size = 3))
 ```
 
-　　第四类国家是西班牙，德国，瑞士等国家，欧洲的大部分国家，这几个国家刚开始疫情发展比较迅速，近期疫情已趋于稳定，各国都开始逐步解封，每日新增确诊病例和新增死亡病例都在逐步下降。
+    
 
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 library(ggplot2)
 library(reshape2)
 library(forcats)
-
-data <- read.csv("data/class4.csv")
+library(ggpubr)
+setwd("C:/Users/15735/git/project-wonder-woman/final repo/data")
+data <- read.csv("class4.csv")
 data <- melt(data,id.vars = "days", variable.name = "country", value.name = "num") 
 num <- c(runif(67), runif(67, min=0, max=1))
 data$day <- fct_inorder(data$day)
-ggplot(data = data, mapping = aes(x = day, y = num, colour = country,group = country )) +
+p4 <- ggplot(data = data, mapping = aes(x = day, y = num, colour = country,group = country )) +
   geom_line(size = 0.5) +
   geom_point(size = 1.5) +
   labs(title = "第四类",x = '时间') +
-  theme(axis.text.x = element_text(angle = 60, hjust = 0.5, vjust =0.5 ,size = 5))
+  theme(axis.text.x = element_text(angle = 60, hjust = 0.5, vjust =0.5 ,size = 2))
 ```
 
-　　第五类国家是中国，意大利，法国和荷兰，疫情发展的大的趋势是逐步得到控制的，其中，中国的疫情出现了一次波动，这可能是由于国内无症状患者的出现。
+    
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
 library(ggplot2)
 library(reshape2)
 library(forcats)
-
-data <- read.csv("data/class5.csv")
+library(ggpubr)
+setwd("C:/Users/15735/git/project-wonder-woman/final repo/data")
+data <- read.csv("class5.csv")
 data <- melt(data,id.vars = "days", variable.name = "country", value.name = "num") 
-num <- c(runif(67), runif(67, min=0, max=1))
+num <- c(runif(83), runif(83, min=0, max=1))
 data$day <- fct_inorder(data$day)
-ggplot(data = data, mapping = aes(x = day, y = num, colour = country,group = country )) +
+p5 <- ggplot(data = data, mapping = aes(x = day, y = num, colour = country,group = country )) +
   geom_line(size = 0.5) +
   geom_point(size = 1.5) +
   labs(title = "第五类",x = '时间') +
-  theme(axis.text.x = element_text(angle = 60, hjust = 0.5, vjust =0.5 ,size = 5))
+  theme(axis.text.x = element_text(angle = 60, hjust = 0.5, vjust =0.5 ,size = 2))
 ```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+ggarrange(p1,p2,p3,p4,p5,ncol=2,nrow=3,labels=c(" ","  "," "," "," "))
+```
+
+
 >>>>>>> 8a43eccac13adedffc7023bcc4172ccb37a79d16
 
 # 4 趋势拟合及预测
